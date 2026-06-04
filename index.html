@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Super Camper Studio V8</title>
+<title>Super Camper Studio Pro</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -20,18 +20,10 @@ TOP TOOLBAR
 <header class="toolbar">
 
     <div class="logo">
-        🏕️ Super Camper Studio V8
+        🏕️ Super Camper Studio Pro
     </div>
 
     <div class="toolbar-actions">
-
-        <button id="undoBtn">↶ Undo</button>
-        <button id="redoBtn">↷ Redo</button>
-
-        <button id="addTextBtn">➕ Add Text</button>
-
-        <button id="duplicateBtn">📑 Duplicate</button>
-        <button id="deleteBtn">🗑 Delete</button>
 
         <button id="saveBtn">💾 Save</button>
 
@@ -41,7 +33,9 @@ TOP TOOLBAR
         </label>
 
         <button id="exportPNG">🖼 PNG</button>
+
         <button id="exportPDF">📄 PDF</button>
+
         <button id="printBtn">🖨 Print</button>
 
     </div>
@@ -83,7 +77,7 @@ MAIN LAYOUT
 
         <div class="panel">
 
-            <h3>🖼 Background</h3>
+            <h3>🖼 Background Upload</h3>
 
             <input
                 type="file"
@@ -96,7 +90,7 @@ MAIN LAYOUT
 
         <div class="panel">
 
-            <h3>📷 Photo</h3>
+            <h3>📷 Photo Upload</h3>
 
             <input
                 type="file"
@@ -109,7 +103,7 @@ MAIN LAYOUT
 
         <div class="panel">
 
-            <h3>📝 Text Content</h3>
+            <h3>📝 Certificate Text</h3>
 
             <input
                 type="text"
@@ -137,6 +131,22 @@ MAIN LAYOUT
 
             <div id="layersPanel">
 
+                <div class="layer-item">
+                    Name
+                </div>
+
+                <div class="layer-item">
+                    Reason
+                </div>
+
+                <div class="layer-item">
+                    Group
+                </div>
+
+                <div class="layer-item">
+                    Photo
+                </div>
+
             </div>
 
         </div>
@@ -162,7 +172,8 @@ MAIN LAYOUT
 
             <img
                 id="photo"
-                class="draggable photo-item">
+                class="draggable photo-item"
+                src="https://via.placeholder.com/180x220">
 
             <!-- Name -->
 
@@ -171,8 +182,6 @@ MAIN LAYOUT
                 class="draggable text-item selected">
 
                 ឈ្មោះអ្នកទទួល
-
-                <span class="resize-handle"></span>
 
             </div>
 
@@ -184,8 +193,6 @@ MAIN LAYOUT
 
                 មូលហេតុទទួលវិញ្ញាបនបត្រ
 
-                <span class="resize-handle"></span>
-
             </div>
 
             <!-- Group -->
@@ -195,8 +202,6 @@ MAIN LAYOUT
                 class="draggable text-item">
 
                 ក្រុម
-
-                <span class="resize-handle"></span>
 
             </div>
 
@@ -209,8 +214,6 @@ MAIN LAYOUT
     ====================== -->
 
     <aside class="properties">
-
-        <!-- Object -->
 
         <div class="panel">
 
@@ -226,7 +229,7 @@ MAIN LAYOUT
 
         </div>
 
-        <!-- Font -->
+        <!-- FONT -->
 
         <div class="panel">
 
@@ -257,7 +260,7 @@ MAIN LAYOUT
 
         </div>
 
-        <!-- Colors -->
+        <!-- COLORS -->
 
         <div class="panel">
 
@@ -279,7 +282,7 @@ MAIN LAYOUT
 
         </div>
 
-        <!-- Style -->
+        <!-- STYLE -->
 
         <div class="panel">
 
@@ -295,6 +298,8 @@ MAIN LAYOUT
 
             </label>
 
+            <br><br>
+
             <label>
 
                 <input
@@ -307,7 +312,7 @@ MAIN LAYOUT
 
         </div>
 
-        <!-- Photo -->
+        <!-- PHOTO -->
 
         <div class="panel">
 
@@ -333,7 +338,7 @@ MAIN LAYOUT
 
         </div>
 
-        <!-- Position -->
+        <!-- POSITION -->
 
         <div class="panel">
 
