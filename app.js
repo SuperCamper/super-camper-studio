@@ -1,282 +1,402 @@
+// =========================
+// SUPER CAMPER STUDIO V7 PRO
+// =========================
+
 const canvas = document.getElementById("canvas");
 
-const bgImage = document.getElementById("bgImage");
-const camperPhoto = document.getElementById("camperPhoto");
+const photo = document.getElementById("photo");
 
-const camperName = document.getElementById("camperName");
-const camperReason = document.getElementById("camperReason");
-const camperGroup = document.getElementById("camperGroup");
+const nameText = document.getElementById("nameText");
+const reasonText = document.getElementById("reasonText");
+const groupText = document.getElementById("groupText");
 
+const backgroundImage =
+document.getElementById("backgroundImage");
 
-// ---------------------
-// Templates
-// ---------------------
+// =========================
+// ACTIVE OBJECT
+// =========================
 
-const templateSelect = document.getElementById("templateSelect");
+let activeObject = nameText;
 
-if(templateSelect){
+function setActive(element){
 
-templateSelect.addEventListener("change", ()=>{
+    document
+    .querySelectorAll(".draggable")
+    .forEach(el=>{
+        el.classList.remove("active");
+    });
 
-bgImage.src = templateSelect.value;
+    element.classList.add("active");
+
+    activeObject = element;
+
+    updatePositionSliders();
+}
+
+document
+.querySelectorAll(".draggable")
+.forEach(el=>{
+
+    el.addEventListener("click",()=>{
+        setActive(el);
+    });
 
 });
+
+setActive(nameText);
+
+// =========================
+// TEXT INPUT
+// =========================
+
+document
+.getElementById("nameInput")
+.addEventListener("input",e=>{
+
+    nameText.innerText = e.target.value;
+
+});
+
+document
+.getElementById("reasonInput")
+.addEventListener("input",e=>{
+
+    reasonText.innerText = e.target.value;
+
+});
+
+document
+.getElementById("groupInput")
+.addEventListener("input",e=>{
+
+    groupText.innerText = e.target.value;
+
+});
+
+// =========================
+// TEMPLATE
+// =========================
+
+document
+.getElementById("templateSelect")
+.addEventListener("change",e=>{
+
+    backgroundImage.src = e.target.value;
+
+});
+
+// =========================
+// BACKGROUND UPLOAD
+// =========================
+
+document
+.getElementById("backgroundUpload")
+.addEventListener("change",e=>{
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(evt){
+
+        backgroundImage.src =
+        evt.target.result;
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+// =========================
+// PHOTO UPLOAD
+// =========================
+
+document
+.getElementById("photoUpload")
+.addEventListener("change",e=>{
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(evt){
+
+        photo.src = evt.target.result;
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+// =========================
+// DRAG ENGINE
+// =========================
+
+let isDragging = false;
+
+let offsetX = 0;
+let offsetY = 0;
+
+function dragStart(e){
+
+    setActive(this);
+
+    isDragging = true;
+
+    const rect =
+    this.getBoundingClientRect();
+
+    const clientX =
+    e.touches ? e.touches[0].clientX : e.clientX;
+
+    const clientY =
+    e.touches ? e.touches[0].clientY : e.clientY;
+
+    offsetX = clientX - rect.left;
+    offsetY = clientY - rect.top;
+}
+
+function dragMove(e){
+
+    if(!isDragging || !activeObject)
+        return;
+
+    const canvasRect =
+    canvas.getBoundingClientRect();
+
+    const clientX =
+    e.touches ? e.touches[0].clientX : e.clientX;
+
+    const clientY =
+    e.touches ? e.touches[0].clientY : e.clientY;
+
+    let x =
+    clientX -
+    canvasRect.left -
+    offsetX;
+
+    let y =
+    clientY -
+    canvasRect.top -
+    offsetY;
+
+    activeObject.style.left =
+    x + "px";
+
+    activeObject.style.top =
+    y + "px";
+
+    updatePositionSliders();
+}
+
+function dragEnd(){
+
+    isDragging = false;
+}
+
+document
+.querySelectorAll(".draggable")
+.forEach(el=>{
+
+    el.addEventListener(
+        "mousedown",
+        dragStart
+    );
+
+    el.addEventListener(
+        "touchstart",
+        dragStart
+    );
+
+});
+
+document.addEventListener(
+    "mousemove",
+    dragMove
+);
+
+document.addEventListener(
+    "touchmove",
+    dragMove
+);
+
+document.addEventListener(
+    "mouseup",
+    dragEnd
+);
+
+document.addEventListener(
+    "touchend",
+    dragEnd
+);
+
+// =========================
+// POSITION SLIDERS
+// =========================
+
+const xPos =
+document.getElementById("xPos");
+
+const yPos =
+document.getElementById("yPos");
+
+function updatePositionSliders(){
+
+    xPos.value =
+    parseInt(activeObject.style.left)||0;
+
+    yPos.value =
+    parseInt(activeObject.style.top)||0;
+}
+
+xPos.addEventListener("input",()=>{
+
+    activeObject.style.left =
+    xPos.value + "px";
+
+});
+
+yPos.addEventListener("input",()=>{
+
+    activeObject.style.top =
+    yPos.value + "px";
+
+});
+
+// =========================
+// TEXT SETTINGS
+// =========================
+
+function currentText(){
+
+    return document.getElementById(
+        document.getElementById(
+        "selectedText").value
+    );
 
 }
 
+document
+.getElementById("fontFamily")
+.addEventListener("change",e=>{
 
-// ---------------------
-// Upload Background
-// ---------------------
-
-const bgUpload = document.getElementById("bgUpload");
-
-if(bgUpload){
-
-bgUpload.addEventListener("change",(e)=>{
-
-const file = e.target.files[0];
-
-if(!file) return;
-
-const reader = new FileReader();
-
-reader.onload = function(ev){
-
-bgImage.src = ev.target.result;
-
-};
-
-reader.readAsDataURL(file);
+    currentText().style.fontFamily =
+    e.target.value;
 
 });
 
-}
+document
+.getElementById("fontSize")
+.addEventListener("input",e=>{
 
-
-// ---------------------
-// Upload Photo
-// ---------------------
-
-const photoUpload = document.getElementById("photoUpload");
-
-if(photoUpload){
-
-photoUpload.addEventListener("change",(e)=>{
-
-const file = e.target.files[0];
-
-if(!file) return;
-
-const reader = new FileReader();
-
-reader.onload = function(ev){
-
-camperPhoto.src = ev.target.result;
-
-};
-
-reader.readAsDataURL(file);
+    currentText().style.fontSize =
+    e.target.value + "px";
 
 });
 
-}
+document
+.getElementById("textColor")
+.addEventListener("input",e=>{
 
-
-// ---------------------
-// Text Inputs
-// ---------------------
-
-const nameInput = document.getElementById("nameInput");
-const reasonInput = document.getElementById("reasonInput");
-const groupInput = document.getElementById("groupInput");
-
-if(nameInput){
-
-nameInput.addEventListener("input",()=>{
-
-camperName.innerText=nameInput.value;
+    currentText().style.color =
+    e.target.value;
 
 });
 
-}
+document
+.getElementById("shadowColor")
+.addEventListener("input",e=>{
 
-if(reasonInput){
-
-reasonInput.addEventListener("input",()=>{
-
-camperReason.innerText=reasonInput.value;
-
-});
-
-}
-
-if(groupInput){
-
-groupInput.addEventListener("input",()=>{
-
-camperGroup.innerText=groupInput.value;
+    currentText().style.textShadow =
+    `3px 3px 4px ${e.target.value}`;
 
 });
 
-}
+document
+.getElementById("boldText")
+.addEventListener("change",e=>{
 
-
-// ---------------------
-// Font Size
-// ---------------------
-
-const fontSize = document.getElementById("fontSize");
-
-if(fontSize){
-
-fontSize.addEventListener("input",()=>{
-
-camperName.style.fontSize = fontSize.value + "px";
+    currentText().style.fontWeight =
+    e.target.checked
+    ? "700"
+    : "400";
 
 });
 
-}
+document
+.getElementById("italicText")
+.addEventListener("change",e=>{
 
-
-// ---------------------
-// Text Color
-// ---------------------
-
-const textColor = document.getElementById("textColor");
-
-if(textColor){
-
-textColor.addEventListener("input",()=>{
-
-camperName.style.color = textColor.value;
-camperReason.style.color = textColor.value;
-camperGroup.style.color = textColor.value;
+    currentText().style.fontStyle =
+    e.target.checked
+    ? "italic"
+    : "normal";
 
 });
 
-}
+// =========================
+// PHOTO SETTINGS
+// =========================
 
+document
+.getElementById("photoSize")
+.addEventListener("input",e=>{
 
-// ---------------------
-// Drag Function
-// ---------------------
-
-function makeDraggable(el){
-
-let isDown=false;
-let offsetX=0;
-let offsetY=0;
-
-el.addEventListener("mousedown",(e)=>{
-
-isDown=true;
-
-offsetX=e.clientX-el.offsetLeft;
-offsetY=e.clientY-el.offsetTop;
+    photo.style.width =
+    e.target.value + "px";
 
 });
 
-document.addEventListener("mousemove",(e)=>{
+document
+.getElementById("photoRadius")
+.addEventListener("input",e=>{
 
-if(!isDown) return;
-
-el.style.left=(e.clientX-offsetX)+"px";
-el.style.top=(e.clientY-offsetY)+"px";
-
-});
-
-document.addEventListener("mouseup",()=>{
-
-isDown=false;
+    photo.style.borderRadius =
+    e.target.value + "%";
 
 });
 
-}
+// =========================
+// EXPORT PNG
+// =========================
 
-makeDraggable(camperPhoto);
-makeDraggable(camperName);
-makeDraggable(camperReason);
-makeDraggable(camperGroup);
+document
+.getElementById("exportPNG")
+.addEventListener("click",()=>{
 
+    html2canvas(canvas)
+    .then(c=>{
 
-// ---------------------
-// Touch Mobile
-// ---------------------
+        const link =
+        document.createElement("a");
 
-function makeTouchDraggable(el){
+        link.download =
+        "super-camper.png";
 
-let startX=0;
-let startY=0;
+        link.href =
+        c.toDataURL();
 
-el.addEventListener("touchstart",(e)=>{
+        link.click();
 
-startX=e.touches[0].clientX-el.offsetLeft;
-startY=e.touches[0].clientY-el.offsetTop;
-
-});
-
-el.addEventListener("touchmove",(e)=>{
-
-e.preventDefault();
-
-el.style.left=
-(e.touches[0].clientX-startX)+"px";
-
-el.style.top=
-(e.touches[0].clientY-startY)+"px";
+    });
 
 });
 
-}
+// =========================
+// PRINT
+// =========================
 
-makeTouchDraggable(camperPhoto);
-makeTouchDraggable(camperName);
-makeTouchDraggable(camperReason);
-makeTouchDraggable(camperGroup);
+document
+.getElementById("printBtn")
+.addEventListener("click",()=>{
 
-
-// ---------------------
-// Export PNG
-// ---------------------
-
-const exportBtn = document.getElementById("exportPNG");
-
-if(exportBtn){
-
-exportBtn.addEventListener("click",()=>{
-
-html2canvas(canvas,{
-scale:2
-}).then(c=>{
-
-const link=document.createElement("a");
-
-link.download="super-camper.png";
-
-link.href=c.toDataURL();
-
-link.click();
+    window.print();
 
 });
-
-});
-
-}
-
-
-// ---------------------
-// Print
-// ---------------------
-
-const printBtn = document.getElementById("printBtn");
-
-if(printBtn){
-
-printBtn.addEventListener("click",()=>{
-
-window.print();
-
-});
-
-}
