@@ -1,630 +1,473 @@
-// ============================
-// SUPER CAMPER STUDIO PRO
-// ============================
+/* ==========================
+   SUPER CAMPER STUDIO V10 PRO MAX
+========================== */
 
 const canvas = document.getElementById("canvas");
 
-const backgroundImage =
-document.getElementById("backgroundImage");
+const photo = document.getElementById("photo");
+const bg = document.getElementById("backgroundImage");
 
-const photo =
-document.getElementById("photo");
+const nameText = document.getElementById("nameText");
+const reasonText = document.getElementById("reasonText");
+const groupText = document.getElementById("groupText");
 
-const nameText =
-document.getElementById("nameText");
+const photoUpload = document.getElementById("photoUpload");
+const backgroundUpload = document.getElementById("backgroundUpload");
 
-const reasonText =
-document.getElementById("reasonText");
+const nameInput = document.getElementById("nameInput");
+const reasonInput = document.getElementById("reasonInput");
+const groupInput = document.getElementById("groupInput");
 
-const groupText =
-document.getElementById("groupText");
+const layersPanel = document.getElementById("layersPanel");
 
-let selectedObject = nameText;
+const selectedText = document.getElementById("selectedText");
 
-// ============================
-// SELECT OBJECT
-// ============================
+const fontFamily = document.getElementById("fontFamily");
+const fontSize = document.getElementById("fontSize");
 
-function selectObject(el){
+const textColor = document.getElementById("textColor");
+const shadowColor = document.getElementById("shadowColor");
+
+const boldText = document.getElementById("boldText");
+const italicText = document.getElementById("italicText");
+
+const photoSize = document.getElementById("photoSize");
+const photoRadius = document.getElementById("photoRadius");
+
+const xPos = document.getElementById("xPos");
+const yPos = document.getElementById("yPos");
+
+const exportPNG = document.getElementById("exportPNG");
+const saveBtn = document.getElementById("saveBtn");
+const loadProject = document.getElementById("loadProject");
+
+let activeElement = null;
+
+let undoStack = [];
+let redoStack = [];
+
+/* ==========================
+   SELECT OBJECT
+========================== */
+
+function selectElement(el){
 
     document
-    .querySelectorAll(".draggable")
-    .forEach(item=>{
+        .querySelectorAll(".selected")
+        .forEach(x=>x.classList.remove("selected"));
 
-        item.classList.remove("selected");
-
-    });
+    activeElement = el;
 
     el.classList.add("selected");
 
-    selectedObject = el;
-
-    updatePositionInputs();
+    updatePositionPanel();
 }
+
+/* ==========================
+   DRAG ENGINE
+========================== */
 
 document
 .querySelectorAll(".draggable")
-.forEach(item=>{
+.forEach(enableDrag);
 
-    item.addEventListener("click",()=>{
+function enableDrag(el){
 
-        selectObject(item);
+    let isDragging=false;
+    let offsetX=0;
+    let offsetY=0;
+
+    el.addEventListener("mousedown",(e)=>{
+
+        selectElement(el);
+
+        isDragging=true;
+
+        offsetX=e.offsetX;
+        offsetY=e.offsetY;
 
     });
 
-});
+    document.addEventListener("mousemove",(e)=>{
 
-// ============================
-// DRAG ENGINE
-// ============================
+        if(!isDragging) return;
 
-let dragging = false;
-let offsetX = 0;
-let offsetY = 0;
+        const rect=canvas.getBoundingClientRect();
 
-function startDrag(e){
+        el.style.left=
+            (e.clientX-rect.left-offsetX)+"px";
 
-    selectObject(this);
+        el.style.top=
+            (e.clientY-rect.top-offsetY)+"px";
 
-    dragging = true;
+        updatePositionPanel();
 
-    const rect =
-    this.getBoundingClientRect();
+    });
 
-    const clientX =
-    e.touches
-    ? e.touches[0].clientX
-    : e.clientX;
+    document.addEventListener("mouseup",()=>{
 
-    const clientY =
-    e.touches
-    ? e.touches[0].clientY
-    : e.clientY;
+        isDragging=false;
 
-    offsetX =
-    clientX - rect.left;
+        saveState();
 
-    offsetY =
-    clientY - rect.top;
+    });
+
 }
 
-function drag(e){
+/* ==========================
+   TEXT INPUTS
+========================== */
 
-    if(!dragging) return;
+nameInput.addEventListener("input",()=>{
 
-    const canvasRect =
-    canvas.getBoundingClientRect();
-
-    const clientX =
-    e.touches
-    ? e.touches[0].clientX
-    : e.clientX;
-
-    const clientY =
-    e.touches
-    ? e.touches[0].clientY
-    : e.clientY;
-
-    selectedObject.style.left =
-    (clientX - canvasRect.left - offsetX)
-    + "px";
-
-    selectedObject.style.top =
-    (clientY - canvasRect.top - offsetY)
-    + "px";
-
-    updatePositionInputs();
-
-    autoSave();
-}
-
-function stopDrag(){
-
-    dragging = false;
-}
-
-document
-.querySelectorAll(".draggable")
-.forEach(item=>{
-
-    item.addEventListener(
-        "mousedown",
-        startDrag
-    );
-
-    item.addEventListener(
-        "touchstart",
-        startDrag
-    );
+    nameText.innerText=nameInput.value;
 
 });
 
-document.addEventListener(
-    "mousemove",
-    drag
-);
+reasonInput.addEventListener("input",()=>{
 
-document.addEventListener(
-    "touchmove",
-    drag
-);
+    reasonText.innerText=reasonInput.value;
 
-document.addEventListener(
-    "mouseup",
-    stopDrag
-);
-
-document.addEventListener(
-    "touchend",
-    stopDrag
-);
-
-// ============================
-// TEMPLATE
-// ============================
-
-document
-.getElementById("templateSelect")
-.addEventListener("change",e=>{
-
-    backgroundImage.src =
-    e.target.value;
-
-    autoSave();
 });
 
-// ============================
-// BACKGROUND UPLOAD
-// ============================
+groupInput.addEventListener("input",()=>{
 
-document
-.getElementById("backgroundUpload")
-.addEventListener("change",e=>{
+    groupText.innerText=groupInput.value;
 
-    const file =
-    e.target.files[0];
+});
+
+/* ==========================
+   PHOTO UPLOAD
+========================== */
+
+photoUpload.addEventListener("change",(e)=>{
+
+    const file=e.target.files[0];
 
     if(!file) return;
 
-    const reader =
-    new FileReader();
+    const reader=new FileReader();
 
-    reader.onload = ev=>{
+    reader.onload=()=>{
 
-        backgroundImage.src =
-        ev.target.result;
+        photo.src=reader.result;
 
-        autoSave();
+        saveState();
+
     };
 
     reader.readAsDataURL(file);
 
 });
 
-// ============================
-// PHOTO UPLOAD
-// ============================
+/* ==========================
+   BACKGROUND UPLOAD
+========================== */
 
-document
-.getElementById("photoUpload")
-.addEventListener("change",e=>{
+backgroundUpload.addEventListener("change",(e)=>{
 
-    const file =
-    e.target.files[0];
+    const file=e.target.files[0];
 
     if(!file) return;
 
-    const reader =
-    new FileReader();
+    const reader=new FileReader();
 
-    reader.onload = ev=>{
+    reader.onload=()=>{
 
-        photo.src =
-        ev.target.result;
+        bg.src=reader.result;
 
-        autoSave();
+        saveState();
+
     };
 
     reader.readAsDataURL(file);
 
 });
 
-// ============================
-// TEXT INPUTS
-// ============================
+/* ==========================
+   FONT SETTINGS
+========================== */
 
-document
-.getElementById("nameInput")
-.addEventListener("input",e=>{
+function currentText(){
 
-    nameText.innerText =
-    e.target.value;
-
-    autoSave();
-});
-
-document
-.getElementById("reasonInput")
-.addEventListener("input",e=>{
-
-    reasonText.innerText =
-    e.target.value;
-
-    autoSave();
-});
-
-document
-.getElementById("groupInput")
-.addEventListener("input",e=>{
-
-    groupText.innerText =
-    e.target.value;
-
-    autoSave();
-});
-
-// ============================
-// SELECT DROPDOWN
-// ============================
-
-document
-.getElementById("selectedText")
-.addEventListener("change",e=>{
-
-    selectObject(
-        document.getElementById(
-            e.target.value
-        )
-    );
-
-});
-
-// ============================
-// FONT FAMILY
-// ============================
-
-document
-.getElementById("fontFamily")
-.addEventListener("change",e=>{
-
-    selectedObject.style.fontFamily =
-    e.target.value;
-
-    autoSave();
-});
-
-// ============================
-// FONT SIZE
-// ============================
-
-document
-.getElementById("fontSize")
-.addEventListener("input",e=>{
-
-    selectedObject.style.fontSize =
-    e.target.value + "px";
-
-    autoSave();
-});
-
-// ============================
-// TEXT COLOR
-// ============================
-
-document
-.getElementById("textColor")
-.addEventListener("input",e=>{
-
-    selectedObject.style.color =
-    e.target.value;
-
-    autoSave();
-});
-
-// ============================
-// SHADOW COLOR
-// ============================
-
-document
-.getElementById("shadowColor")
-.addEventListener("input",e=>{
-
-    selectedObject.style.textShadow =
-    `3px 3px 5px ${e.target.value}`;
-
-    autoSave();
-});
-
-// ============================
-// BOLD
-// ============================
-
-document
-.getElementById("boldText")
-.addEventListener("change",e=>{
-
-    selectedObject.style.fontWeight =
-    e.target.checked
-    ? "700"
-    : "400";
-
-    autoSave();
-});
-
-// ============================
-// ITALIC
-// ============================
-
-document
-.getElementById("italicText")
-.addEventListener("change",e=>{
-
-    selectedObject.style.fontStyle =
-    e.target.checked
-    ? "italic"
-    : "normal";
-
-    autoSave();
-});
-
-// ============================
-// PHOTO SIZE
-// ============================
-
-document
-.getElementById("photoSize")
-.addEventListener("input",e=>{
-
-    photo.style.width =
-    e.target.value + "px";
-
-    autoSave();
-});
-
-// ============================
-// PHOTO RADIUS
-// ============================
-
-document
-.getElementById("photoRadius")
-.addEventListener("input",e=>{
-
-    photo.style.borderRadius =
-    e.target.value + "px";
-
-    autoSave();
-});
-
-// ============================
-// POSITION
-// ============================
-
-const xPos =
-document.getElementById("xPos");
-
-const yPos =
-document.getElementById("yPos");
-
-function updatePositionInputs(){
-
-    if(!selectedObject) return;
-
-    xPos.value =
-    parseInt(
-        selectedObject.style.left || 0
-    );
-
-    yPos.value =
-    parseInt(
-        selectedObject.style.top || 0
+    return document.getElementById(
+        selectedText.value
     );
 }
+
+fontFamily.addEventListener("change",()=>{
+
+    currentText().style.fontFamily=
+        fontFamily.value;
+
+});
+
+fontSize.addEventListener("input",()=>{
+
+    currentText().style.fontSize=
+        fontSize.value+"px";
+
+});
+
+textColor.addEventListener("input",()=>{
+
+    currentText().style.color=
+        textColor.value;
+
+});
+
+shadowColor.addEventListener("input",()=>{
+
+    currentText().style.textShadow=
+        "3px 3px 5px "+shadowColor.value;
+
+});
+
+boldText.addEventListener("change",()=>{
+
+    currentText().style.fontWeight=
+        boldText.checked?"700":"400";
+
+});
+
+italicText.addEventListener("change",()=>{
+
+    currentText().style.fontStyle=
+        italicText.checked?"italic":"normal";
+
+});
+
+/* ==========================
+   PHOTO SETTINGS
+========================== */
+
+photoSize.addEventListener("input",()=>{
+
+    photo.style.width=
+        photoSize.value+"px";
+
+});
+
+photoRadius.addEventListener("input",()=>{
+
+    photo.style.borderRadius=
+        photoRadius.value+"px";
+
+});
+
+/* ==========================
+   POSITION
+========================== */
 
 xPos.addEventListener("input",()=>{
 
-    selectedObject.style.left =
-    xPos.value + "px";
+    if(!activeElement) return;
 
-    autoSave();
+    activeElement.style.left=
+        xPos.value+"px";
+
 });
 
 yPos.addEventListener("input",()=>{
 
-    selectedObject.style.top =
-    yPos.value + "px";
+    if(!activeElement) return;
 
-    autoSave();
+    activeElement.style.top=
+        yPos.value+"px";
+
 });
 
-// ============================
-// KEYBOARD MOVE
-// ============================
+function updatePositionPanel(){
 
-document
-.addEventListener("keydown",e=>{
+    if(!activeElement) return;
 
-    if(!selectedObject) return;
-
-    let left =
-    parseInt(
-        selectedObject.style.left || 0
+    xPos.value=parseInt(
+        activeElement.style.left||0
     );
 
-    let top =
-    parseInt(
-        selectedObject.style.top || 0
+    yPos.value=parseInt(
+        activeElement.style.top||0
     );
 
-    switch(e.key){
+}
 
-        case "ArrowLeft":
-            left--;
-            break;
+/* ==========================
+   LAYERS
+========================== */
 
-        case "ArrowRight":
-            left++;
-            break;
+function refreshLayers(){
 
-        case "ArrowUp":
-            top--;
-            break;
+    layersPanel.innerHTML="";
 
-        case "ArrowDown":
-            top++;
-            break;
+    [
+        nameText,
+        reasonText,
+        groupText,
+        photo
+    ].forEach(el=>{
 
-        default:
-            return;
+        const item=document.createElement("div");
+
+        item.className="layer-item";
+
+        item.innerText=
+            el.id.replace("Text","");
+
+        item.onclick=()=>{
+
+            selectElement(el);
+
+        };
+
+        layersPanel.appendChild(item);
+
+    });
+
+}
+
+refreshLayers();
+
+/* ==========================
+   SAVE STATE
+========================== */
+
+function saveState(){
+
+    const state=canvas.innerHTML;
+
+    undoStack.push(state);
+
+    if(undoStack.length>50){
+
+        undoStack.shift();
+
     }
 
-    selectedObject.style.left =
-    left + "px";
+}
 
-    selectedObject.style.top =
-    top + "px";
+/* ==========================
+   UNDO REDO
+========================== */
 
-    updatePositionInputs();
+document
+.getElementById("undoBtn")
+?.addEventListener("click",()=>{
 
-    autoSave();
+    if(undoStack.length<2) return;
+
+    redoStack.push(
+        undoStack.pop()
+    );
+
+    canvas.innerHTML=
+        undoStack[
+            undoStack.length-1
+        ];
+
 });
 
-// ============================
-// SAVE PROJECT
-// ============================
+document
+.getElementById("redoBtn")
+?.addEventListener("click",()=>{
 
-function autoSave(){
+    if(!redoStack.length) return;
 
-    const data = {
+    const state=
+        redoStack.pop();
 
-        name:nameText.innerText,
-        reason:reasonText.innerText,
-        group:groupText.innerText,
+    undoStack.push(state);
 
-        photo:photo.src,
+    canvas.innerHTML=state;
 
-        background:
-        backgroundImage.src
+});
+
+/* ==========================
+   SAVE PROJECT
+========================== */
+
+saveBtn.addEventListener("click",()=>{
+
+    const data={
+
+        canvas:canvas.innerHTML
+
     };
 
-    localStorage.setItem(
-        "superCamperProject",
-        JSON.stringify(data)
-    );
-}
+    const blob=new Blob(
 
-// ============================
-// LOAD PROJECT
-// ============================
+        [JSON.stringify(data)],
 
-function loadProject(){
+        {type:"application/json"}
 
-    const data =
-    localStorage.getItem(
-        "superCamperProject"
     );
 
-    if(!data) return;
+    const a=document.createElement("a");
 
-    const project =
-    JSON.parse(data);
+    a.href=URL.createObjectURL(blob);
 
-    nameText.innerText =
-    project.name || "";
+    a.download="project.scs";
 
-    reasonText.innerText =
-    project.reason || "";
+    a.click();
 
-    groupText.innerText =
-    project.group || "";
+});
 
-    if(project.photo)
-        photo.src =
-        project.photo;
+/* ==========================
+   LOAD PROJECT
+========================== */
 
-    if(project.background)
-        backgroundImage.src =
-        project.background;
-}
+loadProject.addEventListener("change",(e)=>{
 
-loadProject();
+    const file=e.target.files[0];
 
-// ============================
-// PNG EXPORT
-// ============================
+    if(!file) return;
 
-document
-.getElementById("exportPNG")
-.addEventListener("click",()=>{
+    const reader=new FileReader();
+
+    reader.onload=()=>{
+
+        const data=
+            JSON.parse(reader.result);
+
+        canvas.innerHTML=
+            data.canvas;
+
+    };
+
+    reader.readAsText(file);
+
+});
+
+/* ==========================
+   EXPORT PNG
+========================== */
+
+exportPNG.addEventListener("click",()=>{
 
     html2canvas(canvas).then(c=>{
 
-        const link =
-        document.createElement("a");
+        const a=
+            document.createElement("a");
 
-        link.download =
-        "certificate.png";
+        a.download=
+            "certificate.png";
 
-        link.href =
-        c.toDataURL();
+        a.href=
+            c.toDataURL();
 
-        link.click();
+        a.click();
 
     });
 
 });
 
-// ============================
-// PDF EXPORT
-// ============================
+/* ==========================
+   INIT
+========================== */
 
-document
-.getElementById("exportPDF")
-.addEventListener("click",()=>{
+saveState();
 
-    html2canvas(canvas).then(c=>{
+selectElement(nameText);
 
-        const img =
-        c.toDataURL("image/png");
-
-        const pdf =
-        new jspdf.jsPDF(
-            "p",
-            "mm",
-            "a4"
-        );
-
-        pdf.addImage(
-            img,
-            "PNG",
-            0,
-            0,
-            210,
-            297
-        );
-
-        pdf.save(
-            "certificate.pdf"
-        );
-
-    });
-
-});
-
-// ============================
-// PRINT
-// ============================
-
-document
-.getElementById("printBtn")
-.addEventListener("click",()=>{
-
-    window.print();
-
-});
-
-// ============================
-// START
-// ============================
-
-selectObject(nameText);
-updatePositionInputs();
+console.log(
+    "SUPER CAMPER STUDIO V10 PRO MAX READY"
+);
