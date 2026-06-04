@@ -1,3 +1,7 @@
+/* =========================
+   RESET
+========================= */
+
 *{
     margin:0;
     padding:0;
@@ -5,32 +9,39 @@
 }
 
 body{
-    font-family:'Battambang',sans-serif;
+    font-family:"Battambang",sans-serif;
     background:#eef2f7;
     height:100vh;
     overflow:hidden;
 }
 
 /* =========================
-   TOP TOOLBAR
+   TOOLBAR
 ========================= */
 
 .toolbar{
-    height:70px;
+    height:72px;
     background:#ffffff;
+
     display:flex;
     justify-content:space-between;
     align-items:center;
+
     padding:0 20px;
-    border-bottom:1px solid #dcdcdc;
-    box-shadow:0 2px 10px rgba(0,0,0,.05);
-    z-index:1000;
+
+    border-bottom:1px solid #dfe6e9;
+
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+
+    z-index:999;
 }
 
 .logo{
-    font-size:24px;
+    font-size:26px;
     font-weight:700;
-    color:#1f2937;
 }
 
 .toolbar-buttons{
@@ -39,22 +50,25 @@ body{
     flex-wrap:wrap;
 }
 
-.toolbar-buttons button,
+.toolbar button,
 .loadBtn{
     border:none;
-    background:#ffffff;
-    border:1px solid #ddd;
-    padding:10px 14px;
+    background:white;
+
+    padding:10px 16px;
+
     border-radius:10px;
+
     cursor:pointer;
-    font-weight:600;
-    transition:.2s;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+    font-family:inherit;
 }
 
-.toolbar-buttons button:hover,
+.toolbar button:hover,
 .loadBtn:hover{
-    background:#2563eb;
-    color:white;
+    background:#f5f6fa;
 }
 
 /* =========================
@@ -63,25 +77,43 @@ body{
 
 .studio{
     display:grid;
-    grid-template-columns:280px 1fr 280px;
-    height:calc(100vh - 70px);
+
+    grid-template-columns:
+        260px
+        1fr
+        280px;
+
+    height:calc(100vh - 72px);
+
+    margin-top:72px;
 }
 
 /* =========================
-   SIDEBAR
+   LEFT SIDEBAR
 ========================= */
 
-.sidebar,
-.properties{
+.sidebar{
     background:#f8fafc;
-    overflow-y:auto;
-    padding:15px;
-    border-right:1px solid #ddd;
+
+    overflow:auto;
+
+    padding:16px;
+
+    border-right:1px solid #dde4ea;
 }
 
+/* =========================
+   RIGHT PROPERTIES
+========================= */
+
 .properties{
-    border-right:none;
-    border-left:1px solid #ddd;
+    background:#f8fafc;
+
+    overflow:auto;
+
+    padding:16px;
+
+    border-left:1px solid #dde4ea;
 }
 
 /* =========================
@@ -90,15 +122,19 @@ body{
 
 .panel{
     background:white;
+
+    padding:16px;
+
     border-radius:16px;
-    padding:15px;
-    margin-bottom:15px;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
+
+    margin-bottom:16px;
+
+    box-shadow:
+    0 3px 12px rgba(0,0,0,.06);
 }
 
 .panel h3{
-    margin-bottom:15px;
-    color:#111827;
+    margin-bottom:14px;
     font-size:18px;
 }
 
@@ -110,35 +146,45 @@ input[type=text],
 textarea,
 select{
     width:100%;
+
     padding:10px;
-    border:1px solid #cbd5e1;
+
+    margin-top:8px;
+    margin-bottom:12px;
+
+    border:1px solid #dcdde1;
+
     border-radius:10px;
-    margin-bottom:10px;
-    font-family:'Battambang';
+
+    font-family:inherit;
+}
+
+textarea{
+    resize:vertical;
 }
 
 input[type=file]{
     width:100%;
-}
-
-input[type=color]{
-    width:100%;
-    height:45px;
-    border:none;
-    cursor:pointer;
-    margin-bottom:10px;
+    margin-top:10px;
 }
 
 input[type=range]{
     width:100%;
-    margin-bottom:15px;
+    margin:10px 0;
 }
 
-label{
-    display:block;
-    margin-bottom:5px;
-    font-weight:600;
+input[type=color]{
+    width:100%;
+    height:42px;
+
+    border:none;
+
+    cursor:pointer;
 }
+
+/* =========================
+   CHECKBOX ROW
+========================= */
 
 .checkbox-row{
     display:flex;
@@ -151,24 +197,35 @@ label{
 ========================= */
 
 .workspace{
+    overflow:auto;
+
     display:flex;
     justify-content:center;
-    align-items:center;
-    overflow:auto;
-    padding:20px;
+    align-items:flex-start;
+
+    padding:30px;
+
+    background:#dde4ea;
 }
 
 /* =========================
-   A5 CANVAS
+   CANVAS
 ========================= */
 
 #canvas{
+    position:relative;
+
     width:794px;
     height:1123px;
-    position:relative;
+
     background:white;
-    box-shadow:0 10px 40px rgba(0,0,0,.15);
+
     overflow:hidden;
+
+    border-radius:12px;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.15);
 }
 
 /* =========================
@@ -177,11 +234,70 @@ label{
 
 .background-image{
     position:absolute;
-    inset:0;
+
+    left:0;
+    top:0;
+
     width:100%;
     height:100%;
+
     object-fit:cover;
+
     z-index:1;
+}
+
+/* =========================
+   DRAGGABLE ITEMS
+========================= */
+
+.draggable{
+    position:absolute;
+
+    cursor:move;
+
+    user-select:none;
+
+    touch-action:none;
+
+    z-index:20;
+}
+
+/* =========================
+   ACTIVE OBJECT
+========================= */
+
+.draggable.active{
+    outline:3px solid #0ea5e9;
+    outline-offset:4px;
+
+    box-shadow:
+    0 0 0 6px rgba(14,165,233,.15);
+}
+
+/* =========================
+   RESIZE HANDLE
+========================= */
+
+.draggable.active::after{
+
+    content:"";
+
+    width:16px;
+    height:16px;
+
+    position:absolute;
+
+    right:-12px;
+    bottom:-12px;
+
+    background:#0ea5e9;
+
+    border:3px solid white;
+
+    border-radius:50%;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.25);
 }
 
 /* =========================
@@ -189,22 +305,21 @@ label{
 ========================= */
 
 .photo-item{
-    position:absolute;
-    top:260px;
-    left:300px;
 
     width:180px;
-    height:240px;
+    height:auto;
+
+    left:300px;
+    top:250px;
+
+    border:4px solid white;
+
+    border-radius:12px;
 
     object-fit:cover;
 
-    border:4px solid white;
-    border-radius:10px;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.25);
-
-    z-index:10;
-    cursor:move;
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.25);
 }
 
 /* =========================
@@ -212,63 +327,63 @@ label{
 ========================= */
 
 .text-item{
-    position:absolute;
+
     color:white;
 
+    text-align:center;
+
+    font-family:"Battambang";
+
+    font-weight:700;
+
     text-shadow:
-    3px 3px 6px rgba(0,0,0,.5);
-
-    cursor:move;
-    user-select:none;
-
-    z-index:20;
+    3px 3px 5px rgba(0,0,0,.5);
 }
+
+/* NAME */
 
 #nameText{
-    top:540px;
-    left:200px;
+    font-size:58px;
 
-    width:400px;
-    text-align:center;
-
-    font-size:60px;
-    font-family:'Moul';
+    left:180px;
+    top:520px;
 }
+
+/* REASON */
 
 #reasonText{
-    top:720px;
-    left:180px;
+    font-size:30px;
 
-    width:450px;
-    text-align:center;
-
-    font-size:34px;
+    left:160px;
+    top:640px;
 }
 
+/* GROUP */
+
 #groupText{
-    top:920px;
-    left:260px;
+    font-size:42px;
 
-    width:300px;
-    text-align:center;
-
-    font-size:40px;
+    left:320px;
+    top:930px;
 }
 
 /* =========================
-   LAYERS PANEL
+   LAYERS
 ========================= */
 
 #layersPanel{
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:10px;
 }
 
-#layersPanel div{
-    background:#f1f5f9;
+.layer-item{
     padding:10px;
-    border-radius:8px;
+
+    border-radius:10px;
+
+    background:#f1f5f9;
+
     cursor:pointer;
 }
 
@@ -277,7 +392,8 @@ label{
 ========================= */
 
 ::-webkit-scrollbar{
-    width:8px;
+    width:10px;
+    height:10px;
 }
 
 ::-webkit-scrollbar-thumb{
@@ -286,52 +402,58 @@ label{
 }
 
 /* =========================
-   MOBILE
+   TABLET
 ========================= */
 
 @media(max-width:1200px){
 
     .studio{
-        grid-template-columns:1fr;
-        grid-template-rows:auto auto auto;
+
+        grid-template-columns:
+        220px
+        1fr
+        240px;
+    }
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+    body{
         overflow:auto;
+    }
+
+    .studio{
+
+        display:flex;
+        flex-direction:column;
+
+        height:auto;
     }
 
     .sidebar,
     .properties{
-        height:auto;
+
+        width:100%;
+
         border:none;
     }
 
     .workspace{
-        padding:15px;
+
+        padding:20px;
     }
 
     #canvas{
-        transform:scale(.55);
-        transform-origin:top center;
-    }
-}
 
-@media(max-width:768px){
+        width:397px;
+        height:561px;
 
-    .toolbar{
-        flex-direction:column;
-        height:auto;
-        gap:10px;
-        padding:10px;
-    }
-
-    .toolbar-buttons{
-        justify-content:center;
-    }
-
-    #canvas{
-        transform:scale(.38);
         transform-origin:top center;
     }
 
-    .logo{
-        font-size:18px;
-    }
 }
