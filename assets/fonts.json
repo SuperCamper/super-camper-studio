@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Khmer OS",
+    "file": "KhmerOS.ttf"
+  },
+  {
+    "name": "Khmer OS Apsara",
+    "file": "KhmerOSApsra.ttf"
+  },
+  {
+    "name": "Khmer Moul",
+    "file": "KhmerMoul.ttf"
+  },
+  {
+    "name": "Khmer Nagari",
+    "file": "KhmerNagari.ttf"
+  },
+  {
+    "name": "AKBALTHOM Korea",
+    "file": "AKBALTHOM Korea.TTF"
+  },
+  {
+    "name": "AKBALTHOM TNRB",
+    "file": "AKBALTHOM TNRB.TTF"
+  },
+  {
+    "name": "Khmer DonBosco",
+    "file": "Khmer DonBosco.ttf"
+  },
+  {
+    "name": "Khmer Pailin",
+    "file": "Khmer Pailin.ttf"
+  },
+  {
+    "name": "Khmer Sharp",
+    "file": "Khmer Sharp.ttf"
+  },
+  {
+    "name": "Khmer CN Battambang",
+    "file": "Khmer CN Battambang.ttf"
+  }
+]
