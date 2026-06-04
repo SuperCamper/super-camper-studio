@@ -1,473 +1,432 @@
 /* ==========================
-   SUPER CAMPER STUDIO V10 PRO MAX
+   Super Camper Studio V11
+   Core Engine
 ========================== */
 
-const canvas = document.getElementById("canvas");
-
-const photo = document.getElementById("photo");
-const bg = document.getElementById("backgroundImage");
-
-const nameText = document.getElementById("nameText");
-const reasonText = document.getElementById("reasonText");
-const groupText = document.getElementById("groupText");
-
-const photoUpload = document.getElementById("photoUpload");
-const backgroundUpload = document.getElementById("backgroundUpload");
-
-const nameInput = document.getElementById("nameInput");
-const reasonInput = document.getElementById("reasonInput");
-const groupInput = document.getElementById("groupInput");
-
-const layersPanel = document.getElementById("layersPanel");
-
-const selectedText = document.getElementById("selectedText");
-
-const fontFamily = document.getElementById("fontFamily");
-const fontSize = document.getElementById("fontSize");
-
-const textColor = document.getElementById("textColor");
-const shadowColor = document.getElementById("shadowColor");
-
-const boldText = document.getElementById("boldText");
-const italicText = document.getElementById("italicText");
-
-const photoSize = document.getElementById("photoSize");
-const photoRadius = document.getElementById("photoRadius");
-
-const xPos = document.getElementById("xPos");
-const yPos = document.getElementById("yPos");
-
-const exportPNG = document.getElementById("exportPNG");
-const saveBtn = document.getElementById("saveBtn");
-const loadProject = document.getElementById("loadProject");
-
-let activeElement = null;
-
-let undoStack = [];
-let redoStack = [];
+const state = {
+    layers: [],
+    selectedLayer: null,
+    undoStack: [],
+    redoStack: []
+};
 
 /* ==========================
-   SELECT OBJECT
+   DOM
 ========================== */
 
-function selectElement(el){
+const fontSelect = document.getElementById("fontSelect");
+const templateLibrary = document.getElementById("templateLibrary");
+const stickerLibrary = document.getElementById("stickerLibrary");
+const layerList = document.getElementById("layerList");
 
-    document
-        .querySelectorAll(".selected")
-        .forEach(x=>x.classList.remove("selected"));
+const canvas = document.getElementById("designCanvas");
+const ctx = canvas.getContext("2d");
 
-    activeElement = el;
+/* ==========================
+   Font Loader
+========================== */
 
-    el.classList.add("selected");
+async function loadFonts() {
 
-    updatePositionPanel();
+    try {
+
+        const response =
+            await fetch("assets/fonts/fonts.json");
+
+        const fonts =
+            await response.json();
+
+        fontSelect.innerHTML = "";
+
+        for (const font of fonts) {
+
+            try {
+
+                const face = new FontFace(
+                    font.name,
+                    `url(assets/fonts/${font.file})`
+                );
+
+                await face.load();
+
+                document.fonts.add(face);
+
+            } catch (e) {
+                console.warn(
+                    "Font load failed:",
+                    font.file
+                );
+            }
+
+            const option =
+                document.createElement("option");
+
+            option.value = font.name;
+            option.textContent = font.name;
+
+            fontSelect.appendChild(option);
+        }
+
+        console.log(
+            `Loaded ${fonts.length} fonts`
+        );
+
+    } catch (err) {
+
+        console.error(
+            "fonts.json error",
+            err
+        );
+    }
 }
 
 /* ==========================
-   DRAG ENGINE
+   Template Loader
 ========================== */
 
-document
-.querySelectorAll(".draggable")
-.forEach(enableDrag);
+async function loadTemplates() {
 
-function enableDrag(el){
+    try {
 
-    let isDragging=false;
-    let offsetX=0;
-    let offsetY=0;
+        const response =
+            await fetch(
+                "assets/templates/templates.json"
+            );
 
-    el.addEventListener("mousedown",(e)=>{
+        const templates =
+            await response.json();
 
-        selectElement(el);
+        templateLibrary.innerHTML = "";
 
-        isDragging=true;
+        templates.forEach(template => {
 
-        offsetX=e.offsetX;
-        offsetY=e.offsetY;
+            const card =
+                document.createElement("div");
 
-    });
+            card.className =
+                "template-card";
 
-    document.addEventListener("mousemove",(e)=>{
+            card.innerHTML = `
+                <img
+                    src="assets/templates/${template.file}"
+                    alt="${template.name}">
+            `;
 
-        if(!isDragging) return;
+            card.onclick = () => {
+                applyTemplate(template.file);
+            };
 
-        const rect=canvas.getBoundingClientRect();
+            templateLibrary.appendChild(card);
 
-        el.style.left=
-            (e.clientX-rect.left-offsetX)+"px";
+        });
 
-        el.style.top=
-            (e.clientY-rect.top-offsetY)+"px";
+    } catch (err) {
 
-        updatePositionPanel();
-
-    });
-
-    document.addEventListener("mouseup",()=>{
-
-        isDragging=false;
-
-        saveState();
-
-    });
-
+        console.warn(
+            "templates.json not found"
+        );
+    }
 }
 
 /* ==========================
-   TEXT INPUTS
+   Sticker Loader
 ========================== */
 
-nameInput.addEventListener("input",()=>{
+async function loadStickers() {
 
-    nameText.innerText=nameInput.value;
+    try {
 
-});
+        const response =
+            await fetch(
+                "assets/stickers/stickers.json"
+            );
 
-reasonInput.addEventListener("input",()=>{
+        const stickers =
+            await response.json();
 
-    reasonText.innerText=reasonInput.value;
+        stickerLibrary.innerHTML = "";
 
-});
+        stickers.forEach(sticker => {
 
-groupInput.addEventListener("input",()=>{
+            const item =
+                document.createElement("div");
 
-    groupText.innerText=groupInput.value;
+            item.className =
+                "sticker-item";
 
-});
+            item.innerHTML = `
+                <img
+                    src="assets/stickers/${sticker.file}">
+            `;
 
-/* ==========================
-   PHOTO UPLOAD
-========================== */
+            item.onclick = () => {
+                addSticker(sticker.file);
+            };
 
-photoUpload.addEventListener("change",(e)=>{
+            stickerLibrary.appendChild(item);
 
-    const file=e.target.files[0];
+        });
 
-    if(!file) return;
+    } catch (err) {
 
-    const reader=new FileReader();
-
-    reader.onload=()=>{
-
-        photo.src=reader.result;
-
-        saveState();
-
-    };
-
-    reader.readAsDataURL(file);
-
-});
-
-/* ==========================
-   BACKGROUND UPLOAD
-========================== */
-
-backgroundUpload.addEventListener("change",(e)=>{
-
-    const file=e.target.files[0];
-
-    if(!file) return;
-
-    const reader=new FileReader();
-
-    reader.onload=()=>{
-
-        bg.src=reader.result;
-
-        saveState();
-
-    };
-
-    reader.readAsDataURL(file);
-
-});
-
-/* ==========================
-   FONT SETTINGS
-========================== */
-
-function currentText(){
-
-    return document.getElementById(
-        selectedText.value
-    );
-}
-
-fontFamily.addEventListener("change",()=>{
-
-    currentText().style.fontFamily=
-        fontFamily.value;
-
-});
-
-fontSize.addEventListener("input",()=>{
-
-    currentText().style.fontSize=
-        fontSize.value+"px";
-
-});
-
-textColor.addEventListener("input",()=>{
-
-    currentText().style.color=
-        textColor.value;
-
-});
-
-shadowColor.addEventListener("input",()=>{
-
-    currentText().style.textShadow=
-        "3px 3px 5px "+shadowColor.value;
-
-});
-
-boldText.addEventListener("change",()=>{
-
-    currentText().style.fontWeight=
-        boldText.checked?"700":"400";
-
-});
-
-italicText.addEventListener("change",()=>{
-
-    currentText().style.fontStyle=
-        italicText.checked?"italic":"normal";
-
-});
-
-/* ==========================
-   PHOTO SETTINGS
-========================== */
-
-photoSize.addEventListener("input",()=>{
-
-    photo.style.width=
-        photoSize.value+"px";
-
-});
-
-photoRadius.addEventListener("input",()=>{
-
-    photo.style.borderRadius=
-        photoRadius.value+"px";
-
-});
-
-/* ==========================
-   POSITION
-========================== */
-
-xPos.addEventListener("input",()=>{
-
-    if(!activeElement) return;
-
-    activeElement.style.left=
-        xPos.value+"px";
-
-});
-
-yPos.addEventListener("input",()=>{
-
-    if(!activeElement) return;
-
-    activeElement.style.top=
-        yPos.value+"px";
-
-});
-
-function updatePositionPanel(){
-
-    if(!activeElement) return;
-
-    xPos.value=parseInt(
-        activeElement.style.left||0
-    );
-
-    yPos.value=parseInt(
-        activeElement.style.top||0
-    );
-
+        console.warn(
+            "stickers.json not found"
+        );
+    }
 }
 
 /* ==========================
-   LAYERS
+   Layer System
 ========================== */
 
-function refreshLayers(){
+function addLayer(layer) {
 
-    layersPanel.innerHTML="";
+    state.layers.push(layer);
 
-    [
-        nameText,
-        reasonText,
-        groupText,
-        photo
-    ].forEach(el=>{
+    renderLayers();
 
-        const item=document.createElement("div");
+    saveProject();
+}
 
-        item.className="layer-item";
+function renderLayers() {
 
-        item.innerText=
-            el.id.replace("Text","");
+    layerList.innerHTML = "";
 
-        item.onclick=()=>{
+    state.layers.forEach((layer, index) => {
 
-            selectElement(el);
+        const div =
+            document.createElement("div");
 
+        div.className =
+            "layer-item";
+
+        if (
+            state.selectedLayer === layer.id
+        ) {
+            div.classList.add("active");
+        }
+
+        div.textContent =
+            layer.name || `Layer ${index}`;
+
+        div.onclick = () => {
+
+            state.selectedLayer =
+                layer.id;
+
+            renderLayers();
         };
 
-        layersPanel.appendChild(item);
+        layerList.appendChild(div);
 
     });
-
 }
 
-refreshLayers();
-
 /* ==========================
-   SAVE STATE
+   Template Apply
 ========================== */
 
-function saveState(){
+function applyTemplate(file) {
 
-    const state=canvas.innerHTML;
+    const img = new Image();
 
-    undoStack.push(state);
+    img.onload = () => {
 
-    if(undoStack.length>50){
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
 
-        undoStack.shift();
+        ctx.drawImage(
+            img,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
 
+        saveProject();
+    };
+
+    img.src =
+        `assets/templates/${file}`;
+}
+
+/* ==========================
+   Sticker Add
+========================== */
+
+function addSticker(file) {
+
+    const layer = {
+
+        id: Date.now(),
+
+        type: "sticker",
+
+        file: file,
+
+        x: 100,
+
+        y: 100,
+
+        width: 150,
+
+        height: 150,
+
+        name: file
+
+    };
+
+    addLayer(layer);
+
+    drawCanvas();
+}
+
+/* ==========================
+   Draw Canvas
+========================== */
+
+function drawCanvas() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    state.layers.forEach(layer => {
+
+        if (
+            layer.type === "sticker"
+        ) {
+
+            const img = new Image();
+
+            img.src =
+                `assets/stickers/${layer.file}`;
+
+            img.onload = () => {
+
+                ctx.drawImage(
+                    img,
+                    layer.x,
+                    layer.y,
+                    layer.width,
+                    layer.height
+                );
+            };
+        }
+
+    });
+}
+
+/* ==========================
+   Undo / Redo
+========================== */
+
+function saveHistory() {
+
+    state.undoStack.push(
+        JSON.stringify(state.layers)
+    );
+
+    if (
+        state.undoStack.length > 50
+    ) {
+        state.undoStack.shift();
     }
+}
 
+function undo() {
+
+    if (
+        state.undoStack.length === 0
+    ) return;
+
+    const last =
+        state.undoStack.pop();
+
+    state.redoStack.push(
+        JSON.stringify(state.layers)
+    );
+
+    state.layers =
+        JSON.parse(last);
+
+    drawCanvas();
+    renderLayers();
+}
+
+function redo() {
+
+    if (
+        state.redoStack.length === 0
+    ) return;
+
+    const next =
+        state.redoStack.pop();
+
+    state.undoStack.push(
+        JSON.stringify(state.layers)
+    );
+
+    state.layers =
+        JSON.parse(next);
+
+    drawCanvas();
+    renderLayers();
 }
 
 /* ==========================
-   UNDO REDO
+   Auto Save
 ========================== */
 
-document
-.getElementById("undoBtn")
-?.addEventListener("click",()=>{
+function saveProject() {
 
-    if(undoStack.length<2) return;
-
-    redoStack.push(
-        undoStack.pop()
+    localStorage.setItem(
+        "superCamperProject",
+        JSON.stringify(state.layers)
     );
+}
 
-    canvas.innerHTML=
-        undoStack[
-            undoStack.length-1
-        ];
+function loadProject() {
 
-});
+    const data =
+        localStorage.getItem(
+            "superCamperProject"
+        );
 
-document
-.getElementById("redoBtn")
-?.addEventListener("click",()=>{
+    if (!data) return;
 
-    if(!redoStack.length) return;
+    state.layers =
+        JSON.parse(data);
 
-    const state=
-        redoStack.pop();
-
-    undoStack.push(state);
-
-    canvas.innerHTML=state;
-
-});
+    renderLayers();
+    drawCanvas();
+}
 
 /* ==========================
-   SAVE PROJECT
+   Init
 ========================== */
 
-saveBtn.addEventListener("click",()=>{
+window.addEventListener(
+    "DOMContentLoaded",
+    async () => {
 
-    const data={
+        await loadFonts();
 
-        canvas:canvas.innerHTML
+        await loadTemplates();
 
-    };
+        await loadStickers();
 
-    const blob=new Blob(
+        loadProject();
 
-        [JSON.stringify(data)],
-
-        {type:"application/json"}
-
-    );
-
-    const a=document.createElement("a");
-
-    a.href=URL.createObjectURL(blob);
-
-    a.download="project.scs";
-
-    a.click();
-
-});
-
-/* ==========================
-   LOAD PROJECT
-========================== */
-
-loadProject.addEventListener("change",(e)=>{
-
-    const file=e.target.files[0];
-
-    if(!file) return;
-
-    const reader=new FileReader();
-
-    reader.onload=()=>{
-
-        const data=
-            JSON.parse(reader.result);
-
-        canvas.innerHTML=
-            data.canvas;
-
-    };
-
-    reader.readAsText(file);
-
-});
-
-/* ==========================
-   EXPORT PNG
-========================== */
-
-exportPNG.addEventListener("click",()=>{
-
-    html2canvas(canvas).then(c=>{
-
-        const a=
-            document.createElement("a");
-
-        a.download=
-            "certificate.png";
-
-        a.href=
-            c.toDataURL();
-
-        a.click();
-
-    });
-
-});
-
-/* ==========================
-   INIT
-========================== */
-
-saveState();
-
-selectElement(nameText);
-
-console.log(
-    "SUPER CAMPER STUDIO V10 PRO MAX READY"
+        console.log(
+            "Super Camper Studio V11 Ready"
+        );
+    }
 );
