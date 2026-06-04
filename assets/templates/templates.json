@@ -1,26 +1,26 @@
 [
   {
     "name": "ក្រហម",
-    "file": "ក្រហម.png"
+    "file": "red.png"
   },
   {
     "name": "ខៀវ",
-    "file": "ខៀវ.png"
+    "file": "blue.png"
   },
   {
     "name": "បៃតង",
-    "file": "បៃតង.png"
+    "file": "green.png"
   },
   {
     "name": "ផ្កាឈូក",
-    "file": "ផ្កាឈូក.png"
+    "file": "pink.png"
   },
   {
     "name": "លឿង",
-    "file": "លឿង.png"
+    "file": "yellow.png"
   },
   {
     "name": "ស្វាយ",
-    "file": "ស្វាយ.png"
+    "file": "purple.png"
   }
 ]
