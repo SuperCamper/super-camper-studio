@@ -9,8 +9,8 @@
 }
 
 body{
-    font-family:"Battambang",sans-serif;
-    background:#eef2f7;
+    font-family:'Battambang',sans-serif;
+    background:#edf2f7;
     height:100vh;
     overflow:hidden;
 }
@@ -20,7 +20,13 @@ body{
 ========================= */
 
 .toolbar{
-    height:72px;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+
+    height:70px;
+
     background:#ffffff;
 
     display:flex;
@@ -29,46 +35,48 @@ body{
 
     padding:0 20px;
 
-    border-bottom:1px solid #dfe6e9;
+    border-bottom:1px solid #dbe2ea;
 
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-
-    z-index:999;
+    z-index:9999;
 }
 
 .logo{
-    font-size:26px;
+    font-size:24px;
     font-weight:700;
 }
 
-.toolbar-buttons{
+.toolbar-actions{
     display:flex;
-    gap:10px;
+    gap:8px;
     flex-wrap:wrap;
 }
 
 .toolbar button,
-.loadBtn{
+.file-btn{
+
     border:none;
+
     background:white;
 
-    padding:10px 16px;
+    padding:10px 14px;
 
     border-radius:10px;
 
     cursor:pointer;
 
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
-
     font-family:inherit;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+
+    transition:.2s;
 }
 
 .toolbar button:hover,
-.loadBtn:hover{
-    background:#f5f6fa;
+.file-btn:hover{
+
+    background:#f1f5f9;
+
 }
 
 /* =========================
@@ -76,65 +84,65 @@ body{
 ========================= */
 
 .studio{
+
     display:grid;
 
     grid-template-columns:
-        260px
-        1fr
-        280px;
+    280px
+    1fr
+    300px;
 
-    height:calc(100vh - 72px);
+    height:calc(100vh - 70px);
 
-    margin-top:72px;
+    margin-top:70px;
 }
 
 /* =========================
-   LEFT SIDEBAR
+   SIDEBAR
 ========================= */
+
+.sidebar,
+.properties{
+
+    background:#f8fafc;
+
+    overflow-y:auto;
+
+    padding:16px;
+}
 
 .sidebar{
-    background:#f8fafc;
-
-    overflow:auto;
-
-    padding:16px;
-
-    border-right:1px solid #dde4ea;
+    border-right:1px solid #dbe2ea;
 }
-
-/* =========================
-   RIGHT PROPERTIES
-========================= */
 
 .properties{
-    background:#f8fafc;
-
-    overflow:auto;
-
-    padding:16px;
-
-    border-left:1px solid #dde4ea;
+    border-left:1px solid #dbe2ea;
 }
 
 /* =========================
-   PANEL
+   PANELS
 ========================= */
 
 .panel{
+
     background:white;
 
-    padding:16px;
-
     border-radius:16px;
+
+    padding:16px;
 
     margin-bottom:16px;
 
     box-shadow:
-    0 3px 12px rgba(0,0,0,.06);
+    0 4px 12px rgba(0,0,0,.05);
 }
 
 .panel h3{
+
     margin-bottom:14px;
+
+    color:#1e293b;
+
     font-size:18px;
 }
 
@@ -145,51 +153,45 @@ body{
 input[type=text],
 textarea,
 select{
+
     width:100%;
 
     padding:10px;
 
-    margin-top:8px;
-    margin-bottom:12px;
-
-    border:1px solid #dcdde1;
+    border:1px solid #dbe2ea;
 
     border-radius:10px;
+
+    margin-bottom:12px;
 
     font-family:inherit;
 }
 
 textarea{
-    resize:vertical;
+    resize:none;
 }
 
 input[type=file]{
     width:100%;
-    margin-top:10px;
-}
-
-input[type=range]{
-    width:100%;
-    margin:10px 0;
 }
 
 input[type=color]{
+
     width:100%;
-    height:42px;
+    height:45px;
 
     border:none;
+
+    margin-bottom:12px;
 
     cursor:pointer;
 }
 
-/* =========================
-   CHECKBOX ROW
-========================= */
+input[type=range]{
 
-.checkbox-row{
-    display:flex;
-    justify-content:space-between;
-    margin-top:10px;
+    width:100%;
+
+    margin-bottom:12px;
 }
 
 /* =========================
@@ -197,15 +199,17 @@ input[type=color]{
 ========================= */
 
 .workspace{
-    overflow:auto;
 
     display:flex;
+
     justify-content:center;
     align-items:flex-start;
 
+    overflow:auto;
+
     padding:30px;
 
-    background:#dde4ea;
+    background:#dde5ee;
 }
 
 /* =========================
@@ -213,6 +217,7 @@ input[type=color]{
 ========================= */
 
 #canvas{
+
     position:relative;
 
     width:794px;
@@ -220,12 +225,12 @@ input[type=color]{
 
     background:white;
 
-    overflow:hidden;
-
     border-radius:12px;
 
+    overflow:hidden;
+
     box-shadow:
-    0 20px 50px rgba(0,0,0,.15);
+    0 25px 60px rgba(0,0,0,.15);
 }
 
 /* =========================
@@ -233,10 +238,10 @@ input[type=color]{
 ========================= */
 
 .background-image{
+
     position:absolute;
 
-    left:0;
-    top:0;
+    inset:0;
 
     width:100%;
     height:100%;
@@ -247,57 +252,54 @@ input[type=color]{
 }
 
 /* =========================
-   DRAGGABLE ITEMS
+   DRAGGABLE
 ========================= */
 
 .draggable{
-    position:absolute;
 
-    cursor:move;
+    position:absolute;
 
     user-select:none;
 
-    touch-action:none;
+    cursor:move;
 
-    z-index:20;
+    touch-action:none;
 }
 
 /* =========================
    ACTIVE OBJECT
 ========================= */
 
-.draggable.active{
-    outline:3px solid #0ea5e9;
-    outline-offset:4px;
+.selected{
 
-    box-shadow:
-    0 0 0 6px rgba(14,165,233,.15);
+    outline:2px solid #00a8ff;
+
+    outline-offset:3px;
+
+    z-index:999;
 }
 
 /* =========================
    RESIZE HANDLE
 ========================= */
 
-.draggable.active::after{
-
-    content:"";
-
-    width:16px;
-    height:16px;
+.resize-handle{
 
     position:absolute;
 
-    right:-12px;
-    bottom:-12px;
+    width:14px;
+    height:14px;
 
-    background:#0ea5e9;
+    right:-8px;
+    bottom:-8px;
 
-    border:3px solid white;
+    background:#00a8ff;
+
+    border:2px solid white;
 
     border-radius:50%;
 
-    box-shadow:
-    0 2px 8px rgba(0,0,0,.25);
+    z-index:9999;
 }
 
 /* =========================
@@ -307,19 +309,20 @@ input[type=color]{
 .photo-item{
 
     width:180px;
-    height:auto;
 
+    top:260px;
     left:300px;
-    top:250px;
 
     border:4px solid white;
 
-    border-radius:12px;
+    border-radius:10px;
 
     object-fit:cover;
 
     box-shadow:
-    0 10px 25px rgba(0,0,0,.25);
+    0 10px 20px rgba(0,0,0,.25);
+
+    z-index:10;
 }
 
 /* =========================
@@ -332,39 +335,52 @@ input[type=color]{
 
     text-align:center;
 
-    font-family:"Battambang";
-
-    font-weight:700;
-
     text-shadow:
-    3px 3px 5px rgba(0,0,0,.5);
+    3px 3px 5px rgba(0,0,0,.45);
+
+    z-index:20;
 }
 
 /* NAME */
 
 #nameText{
-    font-size:58px;
 
     left:180px;
     top:520px;
+
+    width:430px;
+
+    font-size:58px;
+
+    font-family:'Moul';
 }
 
 /* REASON */
 
 #reasonText{
+
+    left:170px;
+    top:680px;
+
+    width:460px;
+
     font-size:30px;
 
-    left:160px;
-    top:640px;
+    line-height:1.6;
 }
 
 /* GROUP */
 
 #groupText{
+
+    left:250px;
+    top:930px;
+
+    width:300px;
+
     font-size:42px;
 
-    left:320px;
-    top:930px;
+    font-weight:700;
 }
 
 /* =========================
@@ -372,17 +388,21 @@ input[type=color]{
 ========================= */
 
 #layersPanel{
+
     display:flex;
+
     flex-direction:column;
-    gap:10px;
+
+    gap:8px;
 }
 
 .layer-item{
+
+    background:#f1f5f9;
+
     padding:10px;
 
     border-radius:10px;
-
-    background:#f1f5f9;
 
     cursor:pointer;
 }
@@ -392,12 +412,14 @@ input[type=color]{
 ========================= */
 
 ::-webkit-scrollbar{
-    width:10px;
-    height:10px;
+
+    width:8px;
 }
 
 ::-webkit-scrollbar-thumb{
+
     background:#cbd5e1;
+
     border-radius:20px;
 }
 
@@ -410,9 +432,9 @@ input[type=color]{
     .studio{
 
         grid-template-columns:
-        220px
+        240px
         1fr
-        240px;
+        260px;
     }
 
 }
@@ -431,8 +453,6 @@ input[type=color]{
 
         display:flex;
         flex-direction:column;
-
-        height:auto;
     }
 
     .sidebar,
@@ -450,10 +470,25 @@ input[type=color]{
 
     #canvas{
 
-        width:397px;
-        height:561px;
+        transform:scale(.45);
 
         transform-origin:top center;
+    }
+
+    .toolbar{
+
+        height:auto;
+
+        flex-direction:column;
+
+        padding:10px;
+
+        gap:10px;
+    }
+
+    .toolbar-actions{
+
+        justify-content:center;
     }
 
 }
