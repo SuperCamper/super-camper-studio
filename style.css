@@ -20,14 +20,7 @@ body{
 ========================= */
 
 .toolbar{
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-
     height:70px;
-
-    background:#ffffff;
 
     display:flex;
     justify-content:space-between;
@@ -35,7 +28,17 @@ body{
 
     padding:0 20px;
 
-    border-bottom:1px solid #dce3ea;
+    background:#ffffff;
+
+    border-bottom:1px solid #dbe2ea;
+
+    box-shadow:
+    0 2px 10px rgba(0,0,0,.05);
+
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
 
     z-index:9999;
 }
@@ -43,16 +46,15 @@ body{
 .logo{
     font-size:24px;
     font-weight:700;
+    color:#1e293b;
 }
 
 .toolbar-actions{
     display:flex;
     gap:10px;
-    flex-wrap:wrap;
 }
 
-.toolbar button,
-.file-btn{
+.toolbar button{
 
     border:none;
 
@@ -60,38 +62,37 @@ body{
 
     padding:10px 16px;
 
-    border-radius:12px;
+    border-radius:10px;
 
     cursor:pointer;
 
     font-family:inherit;
 
     box-shadow:
-    0 2px 10px rgba(0,0,0,.08);
+    0 2px 6px rgba(0,0,0,.08);
 
-    transition:.2s;
+    transition:.25s;
 }
 
-.toolbar button:hover,
-.file-btn:hover{
+.toolbar button:hover{
+
+    transform:translateY(-2px);
 
     background:#f1f5f9;
-
-    transform:translateY(-1px);
 }
 
 /* =========================
    MAIN LAYOUT
 ========================= */
 
-.studio{
+.container{
 
     display:grid;
 
     grid-template-columns:
     280px
     1fr
-    300px;
+    320px;
 
     height:calc(100vh - 70px);
 
@@ -99,11 +100,11 @@ body{
 }
 
 /* =========================
-   SIDEBAR
+   SIDEBARS
 ========================= */
 
-.sidebar,
-.properties{
+.left-panel,
+.right-panel{
 
     background:#f8fafc;
 
@@ -112,25 +113,25 @@ body{
     padding:16px;
 }
 
-.sidebar{
-    border-right:1px solid #dce3ea;
+.left-panel{
+    border-right:1px solid #dbe2ea;
 }
 
-.properties{
-    border-left:1px solid #dce3ea;
+.right-panel{
+    border-left:1px solid #dbe2ea;
 }
 
 /* =========================
-   PANELS
+   PANEL
 ========================= */
 
 .panel{
 
     background:white;
 
-    border-radius:16px;
-
     padding:16px;
+
+    border-radius:16px;
 
     margin-bottom:16px;
 
@@ -140,15 +141,15 @@ body{
 
 .panel h3{
 
-    margin-bottom:14px;
+    margin-bottom:12px;
+
+    color:#0f172a;
 
     font-size:18px;
-
-    color:#1e293b;
 }
 
 /* =========================
-   INPUTS
+   FORM CONTROLS
 ========================= */
 
 input[type=text],
@@ -159,11 +160,11 @@ select{
 
     padding:10px;
 
-    border:1px solid #dce3ea;
+    border:1px solid #dbe2ea;
 
     border-radius:10px;
 
-    margin-bottom:12px;
+    margin-bottom:10px;
 
     font-family:inherit;
 }
@@ -173,12 +174,10 @@ textarea{
 }
 
 input[type=file]{
-    width:100%;
-}
 
-input[type=range]{
     width:100%;
-    margin-bottom:12px;
+
+    margin-bottom:10px;
 }
 
 input[type=color]{
@@ -188,9 +187,85 @@ input[type=color]{
 
     border:none;
 
-    margin-bottom:12px;
+    margin-bottom:10px;
 
     cursor:pointer;
+}
+
+input[type=range]{
+
+    width:100%;
+
+    margin-bottom:14px;
+}
+
+/* =========================
+   FONT MANAGER
+========================= */
+
+#fontSearch{
+
+    margin-bottom:10px;
+}
+
+#fontUpload{
+
+    margin-top:10px;
+}
+
+#favoriteFontBtn,
+#deleteFontBtn{
+
+    width:100%;
+
+    margin-top:8px;
+
+    border:none;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-family:inherit;
+
+    transition:.25s;
+}
+
+#favoriteFontBtn{
+
+    background:#fef3c7;
+}
+
+#favoriteFontBtn:hover{
+
+    background:#fde68a;
+}
+
+#deleteFontBtn{
+
+    background:#fee2e2;
+}
+
+#deleteFontBtn:hover{
+
+    background:#fecaca;
+}
+
+#fontPreview{
+
+    margin-top:12px;
+
+    padding:12px;
+
+    background:#f8fafc;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    font-size:22px;
 }
 
 /* =========================
@@ -212,7 +287,7 @@ input[type=color]{
 }
 
 /* =========================
-   A5 CANVAS
+   CANVAS
 ========================= */
 
 #canvas{
@@ -229,7 +304,7 @@ input[type=color]{
     border-radius:12px;
 
     box-shadow:
-    0 25px 60px rgba(0,0,0,.18);
+    0 25px 60px rgba(0,0,0,.20);
 }
 
 /* =========================
@@ -240,8 +315,7 @@ input[type=color]{
 
     position:absolute;
 
-    left:0;
-    top:0;
+    inset:0;
 
     width:100%;
     height:100%;
@@ -252,7 +326,7 @@ input[type=color]{
 }
 
 /* =========================
-   DRAGGABLE
+   DRAGGABLE OBJECTS
 ========================= */
 
 .draggable{
@@ -266,15 +340,11 @@ input[type=color]{
     touch-action:none;
 }
 
-/* =========================
-   SELECTED OBJECT
-========================= */
-
 .selected{
 
-    outline:2px solid #00a8ff;
+    outline:3px solid #0ea5e9;
 
-    outline-offset:3px;
+    outline-offset:4px;
 
     z-index:999;
 }
@@ -292,7 +362,7 @@ input[type=color]{
 
     border:4px solid white;
 
-    border-radius:12px;
+    border-radius:10px;
 
     object-fit:cover;
 
@@ -303,7 +373,7 @@ input[type=color]{
 }
 
 /* =========================
-   TEXT
+   TEXT ITEMS
 ========================= */
 
 .text-item{
@@ -313,7 +383,7 @@ input[type=color]{
     text-align:center;
 
     text-shadow:
-    3px 3px 5px rgba(0,0,0,.45);
+    3px 3px 5px rgba(0,0,0,.4);
 
     z-index:30;
 }
@@ -367,19 +437,17 @@ input[type=color]{
 #layersPanel{
 
     display:flex;
-
     flex-direction:column;
-
     gap:8px;
 }
 
 .layer-item{
 
-    background:#f1f5f9;
-
     padding:10px;
 
     border-radius:10px;
+
+    background:#f1f5f9;
 
     cursor:pointer;
 
@@ -412,12 +480,12 @@ input[type=color]{
 
 @media(max-width:1200px){
 
-    .studio{
+    .container{
 
         grid-template-columns:
         240px
         1fr
-        260px;
+        280px;
     }
 }
 
@@ -431,15 +499,15 @@ input[type=color]{
         overflow:auto;
     }
 
-    .studio{
+    .container{
 
         display:flex;
 
         flex-direction:column;
     }
 
-    .sidebar,
-    .properties{
+    .left-panel,
+    .right-panel{
 
         width:100%;
 
@@ -470,6 +538,8 @@ input[type=color]{
     }
 
     .toolbar-actions{
+
+        flex-wrap:wrap;
 
         justify-content:center;
     }
