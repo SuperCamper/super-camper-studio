@@ -1,0 +1,8 @@
+[
+  { "name": "Red", "file": "red.png" },
+  { "name": "Blue", "file": "blue.png" },
+  { "name": "Green", "file": "green.png" },
+  { "name": "Pink", "file": "pink.png" },
+  { "name": "Yellow", "file": "yellow.png" },
+  { "name": "Purple", "file": "purple.png" }
+]
