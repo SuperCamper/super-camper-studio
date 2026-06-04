@@ -1,10 +1,26 @@
 [
   {
-    "name": "Template 1",
-    "file": "template1.png"
+    "name": "ក្រហម",
+    "file": "ក្រហម.png"
   },
   {
-    "name": "Template 2",
-    "file": "template2.png"
+    "name": "ខៀវ",
+    "file": "ខៀវ.png"
+  },
+  {
+    "name": "បៃតង",
+    "file": "បៃតង.png"
+  },
+  {
+    "name": "ផ្កាឈូក",
+    "file": "ផ្កាឈូក.png"
+  },
+  {
+    "name": "លឿង",
+    "file": "លឿង.png"
+  },
+  {
+    "name": "ស្វាយ",
+    "file": "ស្វាយ.png"
   }
 ]
