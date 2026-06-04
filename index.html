@@ -1,262 +1,319 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Super Camper Studio V9 Pro</title>
+    <title>Super Camper Studio V10 Pro</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Battambang:wght@300;400;700&family=Koulen&family=Moul&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<header class="toolbar">
+    <!-- TOPBAR -->
+    <header class="topbar">
 
-    <div class="logo">
-        🏕️ Super Camper Studio V9 Pro
-    </div>
-
-    <div class="toolbar-actions">
-        <button id="saveBtn">💾 Save</button>
-        <button id="loadBtn">📂 Load</button>
-        <button id="exportPNG">🖼 PNG</button>
-        <button id="exportPDF">📄 PDF</button>
-        <button id="printBtn">🖨 Print</button>
-    </div>
-
-</header>
-
-<div class="container">
-
-    <!-- LEFT SIDEBAR -->
-    <aside class="left-panel">
-
-        <div class="panel">
-            <h3>🎨 Templates</h3>
-
-            <select id="templateSelect">
-                <option value="ក្រហម.png">ក្រហម</option>
-                <option value="បៃតង.png">បៃតង</option>
-                <option value="លឿង.png">លឿង</option>
-                <option value="ស្វាយ.png">ស្វាយ</option>
-                <option value="ផ្កាឈូក.png">ផ្កាឈូក</option>
-                <option value="ខៀវ.png">ខៀវ</option>
-            </select>
+        <div class="logo">
+            🏕️ Super Camper Studio V10 Pro
         </div>
 
-        <div class="panel">
-            <h3>🖼 Background</h3>
+        <div class="top-actions">
 
-            <input type="file"
-                   id="backgroundUpload"
-                   accept="image/*">
+            <button id="saveBtn">💾 Save</button>
+
+            <label class="upload-btn">
+                📂 Load
+                <input type="file" id="loadProject" hidden>
+            </label>
+
+            <button id="exportPNG">🖼 PNG</button>
+            <button id="exportPDF">📄 PDF</button>
+
         </div>
 
-        <div class="panel">
-            <h3>📷 Photo</h3>
+    </header>
 
-            <input type="file"
-                   id="photoUpload"
-                   accept="image/*">
-        </div>
+    <!-- MAIN -->
+    <main class="studio">
 
-        <div class="panel">
-            <h3>📝 Certificate Text</h3>
+        <!-- LEFT PANEL -->
+        <aside class="sidebar">
 
-            <input
-                type="text"
-                id="nameInput"
-                placeholder="ឈ្មោះ">
+            <!-- TEMPLATE -->
+            <div class="panel">
 
-            <textarea
-                id="reasonInput"
-                rows="4"
-                placeholder="មូលហេតុ">
-            </textarea>
+                <h3>🎨 Templates</h3>
 
-            <input
-                type="text"
-                id="groupInput"
-                placeholder="ក្រុម">
-        </div>
+                <select id="templateSelect">
 
-        <div class="panel">
-            <h3>📚 Layers</h3>
+                    <option value="ក្រហម.png">ក្រហម</option>
+                    <option value="បៃតង.png">បៃតង</option>
+                    <option value="លឿង.png">លឿង</option>
+                    <option value="ស្វាយ.png">ស្វាយ</option>
+                    <option value="ផ្កាឈូក.png">ផ្កាឈូក</option>
+                    <option value="ខៀវ.png">ខៀវ</option>
 
-            <div id="layersPanel"></div>
-        </div>
+                </select>
 
-    </aside>
-
-    <!-- CANVAS -->
-    <main class="workspace">
-
-        <div id="canvas">
-
-            <img
-                id="backgroundImage"
-                class="background-image"
-                src="បៃតង.png">
-
-            <img
-                id="photo"
-                class="draggable photo-item">
-
-            <div id="nameText" class="draggable text-item">
-                ឈ្មោះអ្នកទទួល
             </div>
 
-            <div id="reasonText" class="draggable text-item">
-                មូលហេតុទទួលវិញ្ញាបនបត្រ
+            <!-- BACKGROUND -->
+            <div class="panel">
+
+                <h3>🖼 Background Upload</h3>
+
+                <input
+                    type="file"
+                    id="backgroundUpload"
+                    accept="image/*">
+
             </div>
 
-            <div id="groupText" class="draggable text-item">
-                ក្រុម
+            <!-- PHOTO -->
+            <div class="panel">
+
+                <h3>📷 Photo Upload</h3>
+
+                <input
+                    type="file"
+                    id="photoUpload"
+                    accept="image/*">
+
             </div>
 
-        </div>
+            <!-- TEXT -->
+            <div class="panel">
+
+                <h3>📄 Certificate Text</h3>
+
+                <input
+                    id="nameInput"
+                    type="text"
+                    placeholder="ឈ្មោះ">
+
+                <textarea
+                    id="reasonInput"
+                    rows="4"
+                    placeholder="មូលហេតុ">
+                </textarea>
+
+                <input
+                    id="groupInput"
+                    type="text"
+                    placeholder="ក្រុម">
+
+            </div>
+
+            <!-- LAYERS -->
+            <div class="panel">
+
+                <h3>📚 Layers</h3>
+
+                <div id="layersPanel">
+
+                    <button class="layer-btn" data-target="nameText">
+                        Name
+                    </button>
+
+                    <button class="layer-btn" data-target="reasonText">
+                        Reason
+                    </button>
+
+                    <button class="layer-btn" data-target="groupText">
+                        Group
+                    </button>
+
+                    <button class="layer-btn" data-target="photo">
+                        Photo
+                    </button>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- WORKSPACE -->
+        <section class="workspace">
+
+            <div id="canvas">
+
+                <!-- BACKGROUND -->
+                <img
+                    id="backgroundImage"
+                    class="background-image"
+                    src="បៃតង.png">
+
+                <!-- PHOTO -->
+                <img
+                    id="photo"
+                    class="draggable photo-item">
+
+                <!-- NAME -->
+                <div
+                    id="nameText"
+                    class="draggable text-item">
+                    ឈ្មោះអ្នកទទួល
+                </div>
+
+                <!-- REASON -->
+                <div
+                    id="reasonText"
+                    class="draggable text-item">
+                    មូលហេតុទទួលវិញ្ញាបនបត្រ
+                </div>
+
+                <!-- GROUP -->
+                <div
+                    id="groupText"
+                    class="draggable text-item">
+                    ក្រុម
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- RIGHT PANEL -->
+        <aside class="properties">
+
+            <!-- FONT MANAGER -->
+            <div class="panel">
+
+                <h3>🔤 Font Manager</h3>
+
+                <input
+                    type="text"
+                    id="fontSearch"
+                    placeholder="Search font...">
+
+                <select id="fontFamily">
+
+                    <option>Loading Fonts...</option>
+
+                </select>
+
+                <div id="fontPreview">
+                    ABC abc ក ខ គ ឃ ង
+                </div>
+
+                <label class="upload-btn">
+                    ➕ Upload Font
+                    <input
+                        type="file"
+                        id="fontUpload"
+                        accept=".ttf,.otf"
+                        hidden>
+                </label>
+
+            </div>
+
+            <!-- FONT -->
+            <div class="panel">
+
+                <h3>🔠 Font Settings</h3>
+
+                <label>Font Size</label>
+
+                <input
+                    type="range"
+                    id="fontSize"
+                    min="20"
+                    max="150"
+                    value="50">
+
+                <label>Text Color</label>
+
+                <input
+                    type="color"
+                    id="textColor"
+                    value="#ffffff">
+
+                <label>Shadow Color</label>
+
+                <input
+                    type="color"
+                    id="shadowColor"
+                    value="#000000">
+
+            </div>
+
+            <!-- STYLE -->
+            <div class="panel">
+
+                <h3>✨ Style</h3>
+
+                <label>
+                    <input type="checkbox" id="boldText">
+                    Bold
+                </label>
+
+                <label>
+                    <input type="checkbox" id="italicText">
+                    Italic
+                </label>
+
+            </div>
+
+            <!-- PHOTO -->
+            <div class="panel">
+
+                <h3>📷 Photo Settings</h3>
+
+                <label>Photo Size</label>
+
+                <input
+                    type="range"
+                    id="photoSize"
+                    min="100"
+                    max="500"
+                    value="180">
+
+                <label>Border Radius</label>
+
+                <input
+                    type="range"
+                    id="photoRadius"
+                    min="0"
+                    max="100"
+                    value="10">
+
+            </div>
+
+            <!-- POSITION -->
+            <div class="panel">
+
+                <h3>📍 Position</h3>
+
+                <label>X Position</label>
+
+                <input
+                    type="range"
+                    id="xPos"
+                    min="0"
+                    max="794">
+
+                <label>Y Position</label>
+
+                <input
+                    type="range"
+                    id="yPos"
+                    min="0"
+                    max="1123">
+
+            </div>
+
+        </aside>
 
     </main>
 
-    <!-- RIGHT PANEL -->
-    <aside class="right-panel">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-        <!-- FONT MANAGER -->
-        <div class="panel">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-            <h3>🔤 Font Manager</h3>
-
-            <input
-                type="text"
-                id="fontSearch"
-                placeholder="Search Font">
-
-            <select id="fontFamily">
-
-                <option>Battambang</option>
-                <option>Koulen</option>
-                <option>Moul</option>
-
-            </select>
-
-            <input
-                type="file"
-                id="fontUpload"
-                accept=".ttf,.otf,.woff,.woff2">
-
-            <button id="favoriteFontBtn">
-                ⭐ Favorite
-            </button>
-
-            <button id="deleteFontBtn">
-                🗑 Delete Font
-            </button>
-
-            <div id="fontPreview">
-                ការមើល Font ជាមុន
-            </div>
-
-        </div>
-
-        <!-- TEXT SETTINGS -->
-        <div class="panel">
-
-            <h3>🔧 Text Settings</h3>
-
-            <label>Font Size</label>
-
-            <input
-                type="range"
-                id="fontSize"
-                min="10"
-                max="150"
-                value="50">
-
-            <label>Text Color</label>
-
-            <input
-                type="color"
-                id="textColor"
-                value="#ffffff">
-
-            <label>Shadow Color</label>
-
-            <input
-                type="color"
-                id="shadowColor"
-                value="#000000">
-
-            <label>
-                <input type="checkbox" id="boldText">
-                Bold
-            </label>
-
-            <label>
-                <input type="checkbox" id="italicText">
-                Italic
-            </label>
-
-        </div>
-
-        <!-- PHOTO -->
-        <div class="panel">
-
-            <h3>📷 Photo Settings</h3>
-
-            <label>Photo Size</label>
-
-            <input
-                type="range"
-                id="photoSize"
-                min="80"
-                max="600"
-                value="180">
-
-            <label>Border Radius</label>
-
-            <input
-                type="range"
-                id="photoRadius"
-                min="0"
-                max="100"
-                value="10">
-
-        </div>
-
-        <!-- POSITION -->
-        <div class="panel">
-
-            <h3>📍 Position</h3>
-
-            <label>X Position</label>
-
-            <input
-                type="range"
-                id="xPos"
-                min="0"
-                max="1000">
-
-            <label>Y Position</label>
-
-            <input
-                type="range"
-                id="yPos"
-                min="0"
-                max="1400">
-
-        </div>
-
-    </aside>
-
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script src="app.js"></script>
+    <script src="app.js"></script>
 
 </body>
 </html>
