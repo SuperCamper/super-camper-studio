@@ -1,272 +1,100 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Camper Studio V11 Pro Max</title>
 
-<title>Super Camper Studio V11 Pro Max</title>
-
-<link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Battambang:wght@300;400;700&family=Koulen&family=Moul&display=swap" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header class="topbar">
+    <!-- Top Toolbar -->
+    <header class="toolbar">
+        <h1>Super Camper Studio</h1>
 
-    <div class="logo">
-        🏕️ Super Camper Studio V11 Pro Max
-    </div>
+        <div class="toolbar-actions">
 
-    <div class="toolbar">
+            <button id="addTextBtn">Text</button>
 
-        <button id="saveBtn">💾 Save</button>
+            <button id="addImageBtn">Photo</button>
 
-        <button id="undoBtn">↶ Undo</button>
+            <button id="addStickerBtn">Sticker</button>
 
-        <button id="redoBtn">↷ Redo</button>
+            <button id="templateBtn">Template</button>
 
-        <button id="duplicateBtn">📄 Duplicate</button>
+            <button id="undoBtn">Undo</button>
 
-        <button id="deleteBtn">🗑 Delete</button>
+            <button id="redoBtn">Redo</button>
 
-        <button id="lockBtn">🔒 Lock</button>
-
-        <button id="hideBtn">👁 Hide</button>
-
-        <button id="exportPNG">🖼 PNG</button>
-
-        <button id="exportPDF">📄 PDF</button>
-
-        <button id="darkModeBtn">🌙 Dark</button>
-
-    </div>
-
-</header>
-
-<div class="app">
-
-    <!-- LEFT -->
-    <aside class="left-panel">
-
-        <div class="panel">
-
-            <h3>🎨 Templates</h3>
-
-            <select id="templateSelect"></select>
+            <button id="exportBtn">Export PNG</button>
 
         </div>
+    </header>
 
-        <div class="panel">
+    <!-- Main Layout -->
+    <main class="studio-layout">
 
-            <h3>📚 Template Library</h3>
+        <!-- Left Panel -->
+        <aside class="sidebar">
 
-            <div id="templateLibrary"></div>
+            <h3>Fonts</h3>
 
-        </div>
+            <select id="fontSelect">
+                <option>Loading Fonts...</option>
+            </select>
 
-        <div class="panel">
-
-            <h3>🖼 Background</h3>
-
-            <input type="file" id="backgroundUpload">
-
-        </div>
-
-        <div class="panel">
-
-            <h3>📷 Photos</h3>
-
-            <input type="file"
-                   id="photoUpload"
-                   multiple
-                   accept="image/*">
-
-        </div>
-
-        <div class="panel">
-
-            <h3>📝 Text</h3>
-
-            <button id="addTextBtn">
-                ➕ Add Text
-            </button>
-
-            <textarea id="textInput"></textarea>
-
-        </div>
-
-        <div class="panel">
-
-            <h3>🎭 Stickers</h3>
-
-            <div id="stickerLibrary"></div>
-
-        </div>
-
-    </aside>
-
-    <!-- CENTER -->
-    <main class="workspace">
-
-        <div id="canvas">
-
-            <img id="backgroundImage">
-
-            <!-- Layers Auto Create -->
-
-        </div>
-
-    </main>
-
-    <!-- RIGHT -->
-    <aside class="right-panel">
-
-        <div class="panel">
-
-            <h3>🔤 Font Manager</h3>
-
-            <input
-                type="text"
-                id="fontSearch"
-                placeholder="Search Font">
-
-            <select id="fontFamily"></select>
-
-            <input
-                type="file"
-                id="fontUpload"
-                accept=".ttf,.otf,.woff,.woff2">
-
-            <div id="fontPreview">
-                ខ្មែរ ABC abc 123
-            </div>
-
-        </div>
-
-        <div class="panel">
-
-            <h3>🎨 Text Style</h3>
+            <h3>Font Size</h3>
 
             <input
                 type="range"
                 id="fontSize"
                 min="10"
-                max="200"
-                value="50">
+                max="150"
+                value="40"
+            >
+
+            <h3>Text Color</h3>
 
             <input
                 type="color"
-                id="textColor">
+                id="textColor"
+                value="#000000"
+            >
 
-            <input
-                type="color"
-                id="shadowColor">
+            <h3>Templates</h3>
 
-            <input
-                type="color"
-                id="strokeColor">
+            <div id="templateLibrary"></div>
 
-            <label>
-                <input type="checkbox" id="boldText">
-                Bold
-            </label>
+            <h3>Stickers</h3>
 
-            <label>
-                <input type="checkbox" id="italicText">
-                Italic
-            </label>
+            <div id="stickerLibrary"></div>
 
-            <label>
-                <input type="checkbox" id="glowEffect">
-                Glow
-            </label>
+        </aside>
 
-        </div>
+        <!-- Canvas Area -->
+        <section class="canvas-wrapper">
 
-        <div class="panel">
+            <canvas
+                id="designCanvas"
+                width="1080"
+                height="1080">
+            </canvas>
 
-            <h3>📷 Photo</h3>
+        </section>
 
-            <input
-                type="range"
-                id="photoSize"
-                min="50"
-                max="1000">
+        <!-- Right Panel -->
+        <aside class="layers-panel">
 
-            <input
-                type="range"
-                id="photoRadius"
-                min="0"
-                max="100">
+            <h3>Layers</h3>
 
-        </div>
+            <div id="layerList"></div>
 
-        <div class="panel">
+        </aside>
 
-            <h3>📍 Position</h3>
+    </main>
 
-            <input
-                type="range"
-                id="xPos"
-                min="0"
-                max="1000">
-
-            <input
-                type="range"
-                id="yPos"
-                min="0"
-                max="1500">
-
-        </div>
-
-        <div class="panel">
-
-            <h3>📚 Layers</h3>
-
-            <div id="layersPanel"></div>
-
-        </div>
-
-        <div class="panel">
-
-            <h3>🔳 QR Code</h3>
-
-            <input
-                type="text"
-                id="qrText"
-                placeholder="https://">
-
-            <button id="generateQR">
-                Generate QR
-            </button>
-
-        </div>
-
-        <div class="panel">
-
-            <h3>🏷 Barcode</h3>
-
-            <input
-                type="text"
-                id="barcodeText">
-
-            <button id="generateBarcode">
-                Generate Barcode
-            </button>
-
-        </div>
-
-    </aside>
-
-</div>
-
-<script src="app.js"></script>
+    <script src="app.js"></script>
 
 </body>
 </html>
