@@ -1,432 +1,219 @@
-/* ==========================
-   Super Camper Studio V11
-   Core Engine
-========================== */
-
 const state = {
-    layers: [],
-    selectedLayer: null,
-    undoStack: [],
-    redoStack: []
+background: null,
+layers: [],
+selectedLayer: null
 };
-
-/* ==========================
-   DOM
-========================== */
-
-const fontSelect = document.getElementById("fontSelect");
-const templateLibrary = document.getElementById("templateLibrary");
-const stickerLibrary = document.getElementById("stickerLibrary");
-const layerList = document.getElementById("layerList");
 
 const canvas = document.getElementById("designCanvas");
 const ctx = canvas.getContext("2d");
 
-/* ==========================
-   Font Loader
-========================== */
+const templateLibrary =
+document.getElementById("templateLibrary");
 
-async function loadFonts() {
+const layerList =
+document.getElementById("layerList");
 
-    try {
+/* ======================
+Templates
+====================== */
 
-        const response =
-            await fetch("assets/fonts/fonts.json");
+const templates = [
+"red.png",
+"blue.png",
+"green.png",
+"pink.png",
+"yellow.png",
+"purple.png"
+];
 
-        const fonts =
-            await response.json();
+function loadTemplates() {
 
-        fontSelect.innerHTML = "";
+```
+templateLibrary.innerHTML = "";
 
-        for (const font of fonts) {
+templates.forEach(file => {
 
-            try {
+    const card =
+        document.createElement("div");
 
-                const face = new FontFace(
-                    font.name,
-                    `url(assets/fonts/${font.file})`
-                );
+    card.className = "template-card";
 
-                await face.load();
+    card.innerHTML =
+        `<img src="assets/templates/${file}">`;
 
-                document.fonts.add(face);
+    card.onclick = () =>
+        applyTemplate(file);
 
-            } catch (e) {
-                console.warn(
-                    "Font load failed:",
-                    font.file
-                );
-            }
+    templateLibrary.appendChild(card);
+});
+```
 
-            const option =
-                document.createElement("option");
-
-            option.value = font.name;
-            option.textContent = font.name;
-
-            fontSelect.appendChild(option);
-        }
-
-        console.log(
-            `Loaded ${fonts.length} fonts`
-        );
-
-    } catch (err) {
-
-        console.error(
-            "fonts.json error",
-            err
-        );
-    }
 }
 
-/* ==========================
-   Template Loader
-========================== */
-
-async function loadTemplates() {
-
-    try {
-
-        const response =
-            await fetch(
-                "assets/templates/templates.json"
-            );
-
-        const templates =
-            await response.json();
-
-        templateLibrary.innerHTML = "";
-
-        templates.forEach(template => {
-
-            const card =
-                document.createElement("div");
-
-            card.className =
-                "template-card";
-
-            card.innerHTML = `
-                <img
-                    src="assets/templates/${template.file}"
-                    alt="${template.name}">
-            `;
-
-            card.onclick = () => {
-                applyTemplate(template.file);
-            };
-
-            templateLibrary.appendChild(card);
-
-        });
-
-    } catch (err) {
-
-        console.warn(
-            "templates.json not found"
-        );
-    }
-}
-
-/* ==========================
-   Sticker Loader
-========================== */
-
-async function loadStickers() {
-
-    try {
-
-        const response =
-            await fetch(
-                "assets/stickers/stickers.json"
-            );
-
-        const stickers =
-            await response.json();
-
-        stickerLibrary.innerHTML = "";
-
-        stickers.forEach(sticker => {
-
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "sticker-item";
-
-            item.innerHTML = `
-                <img
-                    src="assets/stickers/${sticker.file}">
-            `;
-
-            item.onclick = () => {
-                addSticker(sticker.file);
-            };
-
-            stickerLibrary.appendChild(item);
-
-        });
-
-    } catch (err) {
-
-        console.warn(
-            "stickers.json not found"
-        );
-    }
-}
-
-/* ==========================
-   Layer System
-========================== */
-
-function addLayer(layer) {
-
-    state.layers.push(layer);
-
-    renderLayers();
-
-    saveProject();
-}
-
-function renderLayers() {
-
-    layerList.innerHTML = "";
-
-    state.layers.forEach((layer, index) => {
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            "layer-item";
-
-        if (
-            state.selectedLayer === layer.id
-        ) {
-            div.classList.add("active");
-        }
-
-        div.textContent =
-            layer.name || `Layer ${index}`;
-
-        div.onclick = () => {
-
-            state.selectedLayer =
-                layer.id;
-
-            renderLayers();
-        };
-
-        layerList.appendChild(div);
-
-    });
-}
-
-/* ==========================
-   Template Apply
-========================== */
+/* ======================
+Background
+====================== */
 
 function applyTemplate(file) {
 
-    const img = new Image();
+```
+const img = new Image();
 
-    img.onload = () => {
+img.onload = () => {
 
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
+    state.background = img;
 
-        ctx.drawImage(
-            img,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
+    redrawCanvas();
+};
 
-        saveProject();
-    };
+img.src =
+    `assets/templates/${file}`;
+```
 
-    img.src =
-        `assets/templates/${file}`;
 }
 
-/* ==========================
-   Sticker Add
-========================== */
+/* ======================
+Sticker
+====================== */
 
 function addSticker(file) {
 
-    const layer = {
+```
+state.layers.push({
 
-        id: Date.now(),
+    id: Date.now(),
 
-        type: "sticker",
+    type: "sticker",
 
-        file: file,
+    file,
 
-        x: 100,
+    x: 100,
 
-        y: 100,
+    y: 100,
 
-        width: 150,
+    width: 150,
 
-        height: 150,
+    height: 150
+});
 
-        name: file
+redrawCanvas();
+renderLayers();
+```
 
-    };
-
-    addLayer(layer);
-
-    drawCanvas();
 }
 
-/* ==========================
-   Draw Canvas
-========================== */
+/* ======================
+Draw
+====================== */
 
-function drawCanvas() {
+function redrawCanvas() {
 
-    ctx.clearRect(
+```
+ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+);
+
+if (state.background) {
+
+    ctx.drawImage(
+        state.background,
         0,
         0,
         canvas.width,
         canvas.height
     );
-
-    state.layers.forEach(layer => {
-
-        if (
-            layer.type === "sticker"
-        ) {
-
-            const img = new Image();
-
-            img.src =
-                `assets/stickers/${layer.file}`;
-
-            img.onload = () => {
-
-                ctx.drawImage(
-                    img,
-                    layer.x,
-                    layer.y,
-                    layer.width,
-                    layer.height
-                );
-            };
-        }
-
-    });
 }
 
-/* ==========================
-   Undo / Redo
-========================== */
+state.layers.forEach(layer => {
 
-function saveHistory() {
+    if (layer.type === "sticker") {
 
-    state.undoStack.push(
-        JSON.stringify(state.layers)
-    );
+        const img = new Image();
 
-    if (
-        state.undoStack.length > 50
-    ) {
-        state.undoStack.shift();
+        img.onload = () => {
+
+            ctx.drawImage(
+                img,
+                layer.x,
+                layer.y,
+                layer.width,
+                layer.height
+            );
+        };
+
+        img.src =
+            `assets/stickers/${layer.file}`;
     }
+});
+```
+
 }
 
-function undo() {
+/* ======================
+Layers
+====================== */
 
-    if (
-        state.undoStack.length === 0
-    ) return;
+function renderLayers() {
 
-    const last =
-        state.undoStack.pop();
+```
+layerList.innerHTML = "";
 
-    state.redoStack.push(
-        JSON.stringify(state.layers)
-    );
+state.layers.forEach(layer => {
 
-    state.layers =
-        JSON.parse(last);
+    const item =
+        document.createElement("div");
 
-    drawCanvas();
-    renderLayers();
+    item.className =
+        "layer-item";
+
+    item.textContent =
+        layer.file;
+
+    layerList.appendChild(item);
+});
+```
+
 }
 
-function redo() {
+/* ======================
+Export
+====================== */
 
-    if (
-        state.redoStack.length === 0
-    ) return;
+function exportPNG() {
 
-    const next =
-        state.redoStack.pop();
+```
+const link =
+    document.createElement("a");
 
-    state.undoStack.push(
-        JSON.stringify(state.layers)
-    );
+link.download =
+    "super-camper.png";
 
-    state.layers =
-        JSON.parse(next);
+link.href =
+    canvas.toDataURL();
 
-    drawCanvas();
-    renderLayers();
+link.click();
+```
+
 }
 
-/* ==========================
-   Auto Save
-========================== */
-
-function saveProject() {
-
-    localStorage.setItem(
-        "superCamperProject",
-        JSON.stringify(state.layers)
-    );
-}
-
-function loadProject() {
-
-    const data =
-        localStorage.getItem(
-            "superCamperProject"
-        );
-
-    if (!data) return;
-
-    state.layers =
-        JSON.parse(data);
-
-    renderLayers();
-    drawCanvas();
-}
-
-/* ==========================
-   Init
-========================== */
+/* ======================
+Start
+====================== */
 
 window.addEventListener(
-    "DOMContentLoaded",
-    async () => {
+"DOMContentLoaded",
+() => {
 
-        await loadFonts();
+```
+    loadTemplates();
 
-        await loadTemplates();
+    console.log(
+        "Super Camper Studio Ready"
+    );
+}
+```
 
-        await loadStickers();
-
-        loadProject();
-
-        console.log(
-            "Super Camper Studio V11 Ready"
-        );
-    }
 );
