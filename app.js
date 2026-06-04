@@ -1,5 +1,5 @@
 // ============================
-// SUPER CAMPER STUDIO V8
+// SUPER CAMPER STUDIO PRO
 // ============================
 
 const canvas = document.getElementById("canvas");
@@ -114,6 +114,8 @@ function drag(e){
     + "px";
 
     updatePositionInputs();
+
+    autoSave();
 }
 
 function stopDrag(){
@@ -158,7 +160,7 @@ document.addEventListener(
 );
 
 // ============================
-// TEMPLATE SWITCH
+// TEMPLATE
 // ============================
 
 document
@@ -168,6 +170,7 @@ document
     backgroundImage.src =
     e.target.value;
 
+    autoSave();
 });
 
 // ============================
@@ -186,12 +189,13 @@ document
     const reader =
     new FileReader();
 
-    reader.onload = function(ev){
+    reader.onload = ev=>{
 
         backgroundImage.src =
         ev.target.result;
 
-    }
+        autoSave();
+    };
 
     reader.readAsDataURL(file);
 
@@ -213,19 +217,20 @@ document
     const reader =
     new FileReader();
 
-    reader.onload = function(ev){
+    reader.onload = ev=>{
 
         photo.src =
         ev.target.result;
 
-    }
+        autoSave();
+    };
 
     reader.readAsDataURL(file);
 
 });
 
 // ============================
-// TEXT INPUT
+// TEXT INPUTS
 // ============================
 
 document
@@ -235,6 +240,7 @@ document
     nameText.innerText =
     e.target.value;
 
+    autoSave();
 });
 
 document
@@ -244,6 +250,7 @@ document
     reasonText.innerText =
     e.target.value;
 
+    autoSave();
 });
 
 document
@@ -253,4 +260,371 @@ document
     groupText.innerText =
     e.target.value;
 
+    autoSave();
 });
+
+// ============================
+// SELECT DROPDOWN
+// ============================
+
+document
+.getElementById("selectedText")
+.addEventListener("change",e=>{
+
+    selectObject(
+        document.getElementById(
+            e.target.value
+        )
+    );
+
+});
+
+// ============================
+// FONT FAMILY
+// ============================
+
+document
+.getElementById("fontFamily")
+.addEventListener("change",e=>{
+
+    selectedObject.style.fontFamily =
+    e.target.value;
+
+    autoSave();
+});
+
+// ============================
+// FONT SIZE
+// ============================
+
+document
+.getElementById("fontSize")
+.addEventListener("input",e=>{
+
+    selectedObject.style.fontSize =
+    e.target.value + "px";
+
+    autoSave();
+});
+
+// ============================
+// TEXT COLOR
+// ============================
+
+document
+.getElementById("textColor")
+.addEventListener("input",e=>{
+
+    selectedObject.style.color =
+    e.target.value;
+
+    autoSave();
+});
+
+// ============================
+// SHADOW COLOR
+// ============================
+
+document
+.getElementById("shadowColor")
+.addEventListener("input",e=>{
+
+    selectedObject.style.textShadow =
+    `3px 3px 5px ${e.target.value}`;
+
+    autoSave();
+});
+
+// ============================
+// BOLD
+// ============================
+
+document
+.getElementById("boldText")
+.addEventListener("change",e=>{
+
+    selectedObject.style.fontWeight =
+    e.target.checked
+    ? "700"
+    : "400";
+
+    autoSave();
+});
+
+// ============================
+// ITALIC
+// ============================
+
+document
+.getElementById("italicText")
+.addEventListener("change",e=>{
+
+    selectedObject.style.fontStyle =
+    e.target.checked
+    ? "italic"
+    : "normal";
+
+    autoSave();
+});
+
+// ============================
+// PHOTO SIZE
+// ============================
+
+document
+.getElementById("photoSize")
+.addEventListener("input",e=>{
+
+    photo.style.width =
+    e.target.value + "px";
+
+    autoSave();
+});
+
+// ============================
+// PHOTO RADIUS
+// ============================
+
+document
+.getElementById("photoRadius")
+.addEventListener("input",e=>{
+
+    photo.style.borderRadius =
+    e.target.value + "px";
+
+    autoSave();
+});
+
+// ============================
+// POSITION
+// ============================
+
+const xPos =
+document.getElementById("xPos");
+
+const yPos =
+document.getElementById("yPos");
+
+function updatePositionInputs(){
+
+    if(!selectedObject) return;
+
+    xPos.value =
+    parseInt(
+        selectedObject.style.left || 0
+    );
+
+    yPos.value =
+    parseInt(
+        selectedObject.style.top || 0
+    );
+}
+
+xPos.addEventListener("input",()=>{
+
+    selectedObject.style.left =
+    xPos.value + "px";
+
+    autoSave();
+});
+
+yPos.addEventListener("input",()=>{
+
+    selectedObject.style.top =
+    yPos.value + "px";
+
+    autoSave();
+});
+
+// ============================
+// KEYBOARD MOVE
+// ============================
+
+document
+.addEventListener("keydown",e=>{
+
+    if(!selectedObject) return;
+
+    let left =
+    parseInt(
+        selectedObject.style.left || 0
+    );
+
+    let top =
+    parseInt(
+        selectedObject.style.top || 0
+    );
+
+    switch(e.key){
+
+        case "ArrowLeft":
+            left--;
+            break;
+
+        case "ArrowRight":
+            left++;
+            break;
+
+        case "ArrowUp":
+            top--;
+            break;
+
+        case "ArrowDown":
+            top++;
+            break;
+
+        default:
+            return;
+    }
+
+    selectedObject.style.left =
+    left + "px";
+
+    selectedObject.style.top =
+    top + "px";
+
+    updatePositionInputs();
+
+    autoSave();
+});
+
+// ============================
+// SAVE PROJECT
+// ============================
+
+function autoSave(){
+
+    const data = {
+
+        name:nameText.innerText,
+        reason:reasonText.innerText,
+        group:groupText.innerText,
+
+        photo:photo.src,
+
+        background:
+        backgroundImage.src
+    };
+
+    localStorage.setItem(
+        "superCamperProject",
+        JSON.stringify(data)
+    );
+}
+
+// ============================
+// LOAD PROJECT
+// ============================
+
+function loadProject(){
+
+    const data =
+    localStorage.getItem(
+        "superCamperProject"
+    );
+
+    if(!data) return;
+
+    const project =
+    JSON.parse(data);
+
+    nameText.innerText =
+    project.name || "";
+
+    reasonText.innerText =
+    project.reason || "";
+
+    groupText.innerText =
+    project.group || "";
+
+    if(project.photo)
+        photo.src =
+        project.photo;
+
+    if(project.background)
+        backgroundImage.src =
+        project.background;
+}
+
+loadProject();
+
+// ============================
+// PNG EXPORT
+// ============================
+
+document
+.getElementById("exportPNG")
+.addEventListener("click",()=>{
+
+    html2canvas(canvas).then(c=>{
+
+        const link =
+        document.createElement("a");
+
+        link.download =
+        "certificate.png";
+
+        link.href =
+        c.toDataURL();
+
+        link.click();
+
+    });
+
+});
+
+// ============================
+// PDF EXPORT
+// ============================
+
+document
+.getElementById("exportPDF")
+.addEventListener("click",()=>{
+
+    html2canvas(canvas).then(c=>{
+
+        const img =
+        c.toDataURL("image/png");
+
+        const pdf =
+        new jspdf.jsPDF(
+            "p",
+            "mm",
+            "a4"
+        );
+
+        pdf.addImage(
+            img,
+            "PNG",
+            0,
+            0,
+            210,
+            297
+        );
+
+        pdf.save(
+            "certificate.pdf"
+        );
+
+    });
+
+});
+
+// ============================
+// PRINT
+// ============================
+
+document
+.getElementById("printBtn")
+.addEventListener("click",()=>{
+
+    window.print();
+
+});
+
+// ============================
+// START
+// ============================
+
+selectObject(nameText);
+updatePositionInputs();
