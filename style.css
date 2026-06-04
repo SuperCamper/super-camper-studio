@@ -1,1 +1,337 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
+body{
+    font-family:'Battambang',sans-serif;
+    background:#eef2f7;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* =========================
+   TOP TOOLBAR
+========================= */
+
+.toolbar{
+    height:70px;
+    background:#ffffff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 20px;
+    border-bottom:1px solid #dcdcdc;
+    box-shadow:0 2px 10px rgba(0,0,0,.05);
+    z-index:1000;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:700;
+    color:#1f2937;
+}
+
+.toolbar-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.toolbar-buttons button,
+.loadBtn{
+    border:none;
+    background:#ffffff;
+    border:1px solid #ddd;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.2s;
+}
+
+.toolbar-buttons button:hover,
+.loadBtn:hover{
+    background:#2563eb;
+    color:white;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.studio{
+    display:grid;
+    grid-template-columns:280px 1fr 280px;
+    height:calc(100vh - 70px);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar,
+.properties{
+    background:#f8fafc;
+    overflow-y:auto;
+    padding:15px;
+    border-right:1px solid #ddd;
+}
+
+.properties{
+    border-right:none;
+    border-left:1px solid #ddd;
+}
+
+/* =========================
+   PANEL
+========================= */
+
+.panel{
+    background:white;
+    border-radius:16px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+
+.panel h3{
+    margin-bottom:15px;
+    color:#111827;
+    font-size:18px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+input[type=text],
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    margin-bottom:10px;
+    font-family:'Battambang';
+}
+
+input[type=file]{
+    width:100%;
+}
+
+input[type=color]{
+    width:100%;
+    height:45px;
+    border:none;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+input[type=range]{
+    width:100%;
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:600;
+}
+
+.checkbox-row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:10px;
+}
+
+/* =========================
+   WORKSPACE
+========================= */
+
+.workspace{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:auto;
+    padding:20px;
+}
+
+/* =========================
+   A5 CANVAS
+========================= */
+
+#canvas{
+    width:794px;
+    height:1123px;
+    position:relative;
+    background:white;
+    box-shadow:0 10px 40px rgba(0,0,0,.15);
+    overflow:hidden;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.background-image{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:1;
+}
+
+/* =========================
+   PHOTO
+========================= */
+
+.photo-item{
+    position:absolute;
+    top:260px;
+    left:300px;
+
+    width:180px;
+    height:240px;
+
+    object-fit:cover;
+
+    border:4px solid white;
+    border-radius:10px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.25);
+
+    z-index:10;
+    cursor:move;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.text-item{
+    position:absolute;
+    color:white;
+
+    text-shadow:
+    3px 3px 6px rgba(0,0,0,.5);
+
+    cursor:move;
+    user-select:none;
+
+    z-index:20;
+}
+
+#nameText{
+    top:540px;
+    left:200px;
+
+    width:400px;
+    text-align:center;
+
+    font-size:60px;
+    font-family:'Moul';
+}
+
+#reasonText{
+    top:720px;
+    left:180px;
+
+    width:450px;
+    text-align:center;
+
+    font-size:34px;
+}
+
+#groupText{
+    top:920px;
+    left:260px;
+
+    width:300px;
+    text-align:center;
+
+    font-size:40px;
+}
+
+/* =========================
+   LAYERS PANEL
+========================= */
+
+#layersPanel{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+#layersPanel div{
+    background:#f1f5f9;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:20px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1200px){
+
+    .studio{
+        grid-template-columns:1fr;
+        grid-template-rows:auto auto auto;
+        overflow:auto;
+    }
+
+    .sidebar,
+    .properties{
+        height:auto;
+        border:none;
+    }
+
+    .workspace{
+        padding:15px;
+    }
+
+    #canvas{
+        transform:scale(.55);
+        transform-origin:top center;
+    }
+}
+
+@media(max-width:768px){
+
+    .toolbar{
+        flex-direction:column;
+        height:auto;
+        gap:10px;
+        padding:10px;
+    }
+
+    .toolbar-buttons{
+        justify-content:center;
+    }
+
+    #canvas{
+        transform:scale(.38);
+        transform-origin:top center;
+    }
+
+    .logo{
+        font-size:18px;
+    }
+}
