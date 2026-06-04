@@ -1,35 +1,6 @@
-```css
-/* ====================================
-   SUPER CAMPER STUDIO V11 PRO MAX
-==================================== */
-
-:root{
-
-    --bg:#eef2f7;
-    --panel:#ffffff;
-    --border:#d9dce3;
-
-    --primary:#0d99ff;
-
-    --text:#222;
-    --shadow:rgba(0,0,0,.15);
-
-}
-
-/* DARK MODE */
-
-body.dark{
-
-    --bg:#16181d;
-    --panel:#20242c;
-    --border:#333a46;
-
-    --text:#f1f1f1;
-    --shadow:rgba(0,0,0,.4);
-
-}
-
-/* RESET */
+/* =========================
+   Super Camper Studio V11
+========================= */
 
 *{
     margin:0;
@@ -37,617 +8,250 @@ body.dark{
     box-sizing:border-box;
 }
 
+:root{
+    --bg:#101114;
+    --panel:#1a1d22;
+    --card:#242830;
+    --border:#333842;
+    --text:#ffffff;
+    --accent:#4cafef;
+}
+
 body{
-
-    font-family:'Battambang',sans-serif;
-
+    font-family:Arial, sans-serif;
     background:var(--bg);
-
     color:var(--text);
-
     height:100vh;
-
     overflow:hidden;
-
 }
 
-/* ====================================
-   TOPBAR
-==================================== */
-
-.topbar{
-
-    height:70px;
-
-    background:var(--panel);
-
-    border-bottom:1px solid var(--border);
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:0 20px;
-
-}
-
-.logo{
-
-    font-size:24px;
-    font-weight:700;
-
-}
+/* =========================
+   Toolbar
+========================= */
 
 .toolbar{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    background:var(--panel);
+    border-bottom:1px solid var(--border);
+}
 
+.toolbar h1{
+    font-size:22px;
+    font-weight:700;
+}
+
+.toolbar-actions{
     display:flex;
     gap:10px;
-    flex-wrap:wrap;
-
 }
 
 .toolbar button{
-
+    padding:10px 14px;
     border:none;
-
-    background:var(--primary);
-
+    border-radius:8px;
+    background:var(--accent);
     color:white;
-
-    padding:10px 15px;
-
-    border-radius:10px;
-
     cursor:pointer;
-
-    font-weight:600;
-
+    transition:.2s;
 }
 
 .toolbar button:hover{
-
-    opacity:.9;
-
+    transform:translateY(-2px);
 }
 
-/* ====================================
-   APP LAYOUT
-==================================== */
+/* =========================
+   Main Layout
+========================= */
 
-.app{
-
+.studio-layout{
     display:grid;
-
-    grid-template-columns:
-    280px
-    1fr
-    320px;
-
+    grid-template-columns:280px 1fr 280px;
     height:calc(100vh - 70px);
-
 }
 
-/* ====================================
-   SIDEBARS
-==================================== */
+/* =========================
+   Left Sidebar
+========================= */
 
-.left-panel,
-.right-panel{
-
+.sidebar{
     background:var(--panel);
-
-    overflow:auto;
-
-    padding:15px;
-
-}
-
-.left-panel{
-
     border-right:1px solid var(--border);
-
+    padding:20px;
+    overflow:auto;
 }
 
-.right-panel{
-
-    border-left:1px solid var(--border);
-
+.sidebar h3{
+    margin-bottom:10px;
+    margin-top:20px;
 }
 
-/* ====================================
-   PANEL
-==================================== */
-
-.panel{
-
-    background:var(--panel);
-
-    border:1px solid var(--border);
-
-    border-radius:16px;
-
-    padding:15px;
-
+.sidebar select,
+.sidebar input{
+    width:100%;
     margin-bottom:15px;
-
-    box-shadow:
-    0 3px 10px var(--shadow);
-
 }
 
-.panel h3{
+/* =========================
+   Canvas Area
+========================= */
 
-    margin-bottom:12px;
-
-    font-size:18px;
-
-}
-
-/* ====================================
-   INPUTS
-==================================== */
-
-input[type=text],
-input[type=file],
-textarea,
-select{
-
-    width:100%;
-
-    padding:10px;
-
-    border:1px solid var(--border);
-
-    border-radius:10px;
-
-    background:white;
-
-    margin-bottom:10px;
-
-    font-family:inherit;
-
-}
-
-body.dark input,
-body.dark textarea,
-body.dark select{
-
-    background:#2b313b;
-    color:white;
-
-}
-
-textarea{
-
-    resize:vertical;
-
-}
-
-input[type=range]{
-
-    width:100%;
-    margin-bottom:10px;
-
-}
-
-input[type=color]{
-
-    width:100%;
-    height:45px;
-
-    border:none;
-
-    margin-bottom:10px;
-
-}
-
-/* ====================================
-   BUTTONS
-==================================== */
-
-button{
-
-    cursor:pointer;
-
-    border:none;
-
-    border-radius:10px;
-
-    padding:10px 12px;
-
-}
-
-#addTextBtn{
-
-    width:100%;
-
-    background:var(--primary);
-
-    color:white;
-
-}
-
-/* ====================================
-   WORKSPACE
-==================================== */
-
-.workspace{
-
-    background:#d8dee9;
-
+.canvas-wrapper{
     display:flex;
     justify-content:center;
     align-items:center;
-
+    background:#0c0d10;
     overflow:auto;
-
-    position:relative;
-
 }
 
-body.dark .workspace{
-
-    background:#101216;
-
-}
-
-/* ====================================
-   CANVAS
-==================================== */
-
-#canvas{
-
-    position:relative;
-
-    width:794px;
-    height:1123px;
-
+#designCanvas{
     background:white;
-
-    overflow:hidden;
-
+    border-radius:12px;
     box-shadow:
-    0 10px 40px rgba(0,0,0,.25);
-
+    0 0 20px rgba(0,0,0,.4);
 }
 
-/* ====================================
-   BACKGROUND
-==================================== */
+/* =========================
+   Layers Panel
+========================= */
 
-#backgroundImage{
-
-    position:absolute;
-
-    inset:0;
-
-    width:100%;
-    height:100%;
-
-    object-fit:cover;
-
+.layers-panel{
+    background:var(--panel);
+    border-left:1px solid var(--border);
+    padding:20px;
+    overflow:auto;
 }
 
-/* ====================================
-   DRAGGABLE OBJECTS
-==================================== */
-
-.draggable{
-
-    position:absolute;
-
-    cursor:move;
-
-    user-select:none;
-
+.layers-panel h3{
+    margin-bottom:15px;
 }
 
-.text-layer{
-
-    min-width:50px;
-
-    font-size:48px;
-
-    font-weight:700;
-
-}
-
-.photo-layer{
-
-    width:220px;
-
-    height:220px;
-
-    object-fit:cover;
-
-}
-
-/* ====================================
-   SELECTED OBJECT
-==================================== */
-
-.selected{
-
-    outline:3px solid var(--primary);
-
-    outline-offset:3px;
-
-}
-
-/* ====================================
-   RESIZE HANDLES
-==================================== */
-
-.resize-handle{
-
-    width:12px;
-    height:12px;
-
-    background:var(--primary);
-
-    border:2px solid white;
-
-    border-radius:50%;
-
-    position:absolute;
-
-    z-index:999;
-
-}
-
-.handle-nw{
-    top:-8px;
-    left:-8px;
-}
-
-.handle-n{
-    top:-8px;
-    left:50%;
-    transform:translateX(-50%);
-}
-
-.handle-ne{
-    top:-8px;
-    right:-8px;
-}
-
-.handle-e{
-    right:-8px;
-    top:50%;
-    transform:translateY(-50%);
-}
-
-.handle-se{
-    right:-8px;
-    bottom:-8px;
-}
-
-.handle-s{
-    bottom:-8px;
-    left:50%;
-    transform:translateX(-50%);
-}
-
-.handle-sw{
-    bottom:-8px;
-    left:-8px;
-}
-
-.handle-w{
-    left:-8px;
-    top:50%;
-    transform:translateY(-50%);
-}
-
-/* ====================================
-   LAYER PANEL
-==================================== */
-
-#layersPanel{
-
+#layerList{
     display:flex;
     flex-direction:column;
-    gap:8px;
-
+    gap:10px;
 }
+
+/* =========================
+   Layer Item
+========================= */
 
 .layer-item{
-
-    padding:10px;
-
-    border-radius:10px;
-
-    background:#f1f4f8;
-
-    cursor:pointer;
-
+    background:var(--card);
     border:1px solid var(--border);
-
-}
-
-body.dark .layer-item{
-
-    background:#2c313b;
-
+    border-radius:10px;
+    padding:10px;
+    cursor:pointer;
 }
 
 .layer-item.active{
-
-    background:var(--primary);
-
-    color:white;
-
+    border-color:var(--accent);
 }
 
-/* ====================================
-   STICKER LIBRARY
-==================================== */
-
-#stickerLibrary{
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(3,1fr);
-
-    gap:8px;
-
-}
-
-.sticker{
-
-    aspect-ratio:1;
-
-    background:#f2f2f2;
-
-    border-radius:10px;
-
-    overflow:hidden;
-
-    cursor:pointer;
-
-}
-
-.sticker img{
-
-    width:100%;
-    height:100%;
-
-    object-fit:contain;
-
-}
-
-/* ====================================
-   TEMPLATE LIBRARY
-==================================== */
+/* =========================
+   Template Library
+========================= */
 
 #templateLibrary{
-
     display:grid;
-
     grid-template-columns:1fr;
-
     gap:10px;
-
 }
 
 .template-card{
-
-    border-radius:12px;
-
-    overflow:hidden;
-
     border:1px solid var(--border);
-
+    border-radius:10px;
+    overflow:hidden;
     cursor:pointer;
-
 }
 
 .template-card img{
-
     width:100%;
-
     display:block;
-
 }
 
-/* ====================================
-   FONT PREVIEW
-==================================== */
+/* =========================
+   Sticker Library
+========================= */
 
-#fontPreview{
-
-    margin-top:10px;
-
-    padding:12px;
-
-    border-radius:12px;
-
-    border:1px dashed var(--border);
-
-    text-align:center;
-
-    font-size:22px;
-
+#stickerLibrary{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
 }
 
-/* ====================================
-   SCROLLBAR
-==================================== */
+.sticker-item{
+    background:var(--card);
+    border-radius:10px;
+    padding:8px;
+    cursor:pointer;
+}
+
+.sticker-item img{
+    width:100%;
+    display:block;
+}
+
+/* =========================
+   Scrollbar
+========================= */
 
 ::-webkit-scrollbar{
-
-    width:10px;
-    height:10px;
-
+    width:8px;
 }
 
 ::-webkit-scrollbar-thumb{
-
-    background:#b8bec9;
-
-    border-radius:20px;
-
+    background:#555;
+    border-radius:10px;
 }
 
-/* ====================================
-   MOBILE
-==================================== */
+/* =========================
+   Mobile Responsive
+========================= */
 
-@media(max-width:1100px){
+@media(max-width:900px){
 
-    .app{
-
-        grid-template-columns:
-        240px
-        1fr;
-
+    .studio-layout{
+        grid-template-columns:1fr;
     }
 
-    .right-panel{
-
+    .sidebar{
         display:none;
-
     }
 
-}
-
-@media(max-width:768px){
-
-    .app{
-
-        display:flex;
-        flex-direction:column;
-
+    .layers-panel{
+        display:none;
     }
 
-    .left-panel,
-    .right-panel{
-
-        width:100%;
+    #designCanvas{
+        width:95%;
         height:auto;
-
-    }
-
-    .workspace{
-
-        flex:1;
-
-    }
-
-    #canvas{
-
-        transform:scale(.55);
-
-        transform-origin:top center;
-
     }
 
     .toolbar{
-
-        overflow:auto;
-
+        flex-direction:column;
+        height:auto;
+        padding:10px;
+        gap:10px;
     }
 
+    .toolbar-actions{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
 }
-```
+
+/* =========================
+   Dark Mode Ready
+========================= */
+
+body.dark{
+    --bg:#090909;
+    --panel:#151515;
+    --card:#202020;
+    --border:#303030;
+    --text:#f5f5f5;
+}
