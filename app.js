@@ -1,7 +1,5 @@
 const state = {
-background: null,
-layers: [],
-selectedLayer: null
+background: null
 };
 
 const canvas = document.getElementById("designCanvas");
@@ -10,12 +8,12 @@ const ctx = canvas.getContext("2d");
 const templateLibrary =
 document.getElementById("templateLibrary");
 
-const layerList =
-document.getElementById("layerList");
+const exportBtn =
+document.getElementById("exportBtn");
 
-/* ======================
+/* ==========================
 Templates
-====================== */
+========================== */
 
 const templates = [
 "red.png",
@@ -29,6 +27,8 @@ const templates = [
 function loadTemplates() {
 
 ```
+if (!templateLibrary) return;
+
 templateLibrary.innerHTML = "";
 
 templates.forEach(file => {
@@ -36,13 +36,19 @@ templates.forEach(file => {
     const card =
         document.createElement("div");
 
-    card.className = "template-card";
+    card.className =
+        "template-card";
 
-    card.innerHTML =
-        `<img src="assets/templates/${file}">`;
+    card.innerHTML = `
+        <img
+        src="assets/templates/${file}"
+        alt="${file}">
+    `;
 
-    card.onclick = () =>
-        applyTemplate(file);
+    card.addEventListener(
+        "click",
+        () => applyTemplate(file)
+    );
 
     templateLibrary.appendChild(card);
 });
@@ -50,9 +56,9 @@ templates.forEach(file => {
 
 }
 
-/* ======================
-Background
-====================== */
+/* ==========================
+Apply Template
+========================== */
 
 function applyTemplate(file) {
 
@@ -66,45 +72,23 @@ img.onload = () => {
     redrawCanvas();
 };
 
+img.onerror = () => {
+
+    console.error(
+        "Cannot load template:",
+        file
+    );
+};
+
 img.src =
     `assets/templates/${file}`;
 ```
 
 }
 
-/* ======================
-Sticker
-====================== */
-
-function addSticker(file) {
-
-```
-state.layers.push({
-
-    id: Date.now(),
-
-    type: "sticker",
-
-    file,
-
-    x: 100,
-
-    y: 100,
-
-    width: 150,
-
-    height: 150
-});
-
-redrawCanvas();
-renderLayers();
-```
-
-}
-
-/* ======================
-Draw
-====================== */
+/* ==========================
+Draw Canvas
+========================== */
 
 function redrawCanvas() {
 
@@ -126,61 +110,13 @@ if (state.background) {
         canvas.height
     );
 }
-
-state.layers.forEach(layer => {
-
-    if (layer.type === "sticker") {
-
-        const img = new Image();
-
-        img.onload = () => {
-
-            ctx.drawImage(
-                img,
-                layer.x,
-                layer.y,
-                layer.width,
-                layer.height
-            );
-        };
-
-        img.src =
-            `assets/stickers/${layer.file}`;
-    }
-});
 ```
 
 }
 
-/* ======================
-Layers
-====================== */
-
-function renderLayers() {
-
-```
-layerList.innerHTML = "";
-
-state.layers.forEach(layer => {
-
-    const item =
-        document.createElement("div");
-
-    item.className =
-        "layer-item";
-
-    item.textContent =
-        layer.file;
-
-    layerList.appendChild(item);
-});
-```
-
-}
-
-/* ======================
-Export
-====================== */
+/* ==========================
+Export PNG
+========================== */
 
 function exportPNG() {
 
@@ -189,19 +125,36 @@ const link =
     document.createElement("a");
 
 link.download =
-    "super-camper.png";
+    "super-camper-design.png";
 
 link.href =
-    canvas.toDataURL();
+    canvas.toDataURL(
+        "image/png"
+    );
 
 link.click();
 ```
 
 }
 
-/* ======================
+/* ==========================
+Events
+========================== */
+
+if (exportBtn) {
+
+```
+exportBtn.addEventListener(
+    "click",
+    exportPNG
+);
+```
+
+}
+
+/* ==========================
 Start
-====================== */
+========================== */
 
 window.addEventListener(
 "DOMContentLoaded",
@@ -211,7 +164,7 @@ window.addEventListener(
     loadTemplates();
 
     console.log(
-        "Super Camper Studio Ready"
+        "Super Camper Studio V12 Ready"
     );
 }
 ```
